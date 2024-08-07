@@ -1,0 +1,4 @@
+name: Ito_paper
+version: '${project.version}'
+main: net.tv.twitch.chrono_fish.ito_paper.Ito_paper
+api-version: '1.20'
