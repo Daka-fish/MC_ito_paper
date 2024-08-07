@@ -7,11 +7,11 @@ public class ItoGame {
     private ArrayList<ItoPlayer> itoPlayers;
 
     public ItoGame(){
-        theme = "";
+        theme = "テーマを設定してください";
     }
 
-    public void setTheme(String theme) { this.theme = theme; }
-    public String getTheme() { return theme; }
+    public void setTheme(String theme) {this.theme = theme;}
+    public String getTheme() {return theme;}
 
-    public ArrayList<ItoPlayer> getPlayers() { return itoPlayers; }
+    public ArrayList<ItoPlayer> getPlayers() {return itoPlayers;}
 }
