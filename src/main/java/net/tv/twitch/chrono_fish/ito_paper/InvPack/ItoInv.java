@@ -34,8 +34,8 @@ public class ItoInv {
         paper.setItemMeta(paperMeta);
 
         menu.setItem(11,stick);
-        menu.setItem(42,paper);
         menu.setItem(13,paper);
+        menu.setItem(42,gunpowder);
     }
 
     public Inventory getMenu() {return menu;}
