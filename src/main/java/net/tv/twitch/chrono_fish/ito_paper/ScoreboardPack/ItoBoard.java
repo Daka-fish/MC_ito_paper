@@ -18,21 +18,24 @@ public class ItoBoard {
         board = Bukkit.getScoreboardManager().getNewScoreboard();
         obj = board.registerNewObjective("sidebar", Criteria.DUMMY, Component.text("-Ito-").decorate(TextDecoration.BOLD));
         this.itoPlayer = itoPlayer;
-        yourNumber = "  └ §e"+itoPlayer.getNumber();
+        yourNumber = " └ §e"+itoPlayer.getNumber();
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        Score s1 = obj.getScore("+あなたの数字:");
-        Score s2 = obj.getScore("+宣言:");
-        Score s3 = obj.getScore("");
+        Score s1 = obj.getScore("");
+        Score s2 = obj.getScore("+あなたの数字:");
+        Score s3 = obj.getScore(" ");
+        Score s4 = obj.getScore("+宣言:");
+
         Score number = obj.getScore(yourNumber);
 
-        s1.setScore(-1);
+        s1.setScore(0);
+        s2.setScore(-1);
         number.setScore(-2);
         s3.setScore(-3);
-        s2.setScore(-4);
+        s4.setScore(-4);
 
         for(int i = 1; i<10; i++){
-            Score entry = obj.getScore("  └"+i+":");
+            Score entry = obj.getScore(" └"+i+":");
             entry.setScore(-(i+4));
         }
     }
@@ -41,7 +44,7 @@ public class ItoBoard {
 
     public void resetNumber(){
         board.resetScores(yourNumber);
-        yourNumber = "   └ §e"+itoPlayer.getNumber();
+        yourNumber = " └ §e"+itoPlayer.getNumber();
         obj.getScore(yourNumber).setScore(-2);
 
     }

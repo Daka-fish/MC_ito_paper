@@ -1,5 +1,7 @@
 package net.tv.twitch.chrono_fish.ito_paper.GamePack;
 
+import org.bukkit.entity.Player;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -26,6 +28,20 @@ public class ItoGame {
     public ArrayList<ItoPlayer> getField() {return field;}
 
     public ThemeManager getThemeManager() {return themeManager;}
+
+    public ItoPlayer findItoPlayer(Player player){
+        ItoPlayer itoPlayer = null;
+        for (ItoPlayer ip : itoPlayers) {
+            if (ip.getPlayer().equals(player)) {
+                itoPlayer = ip;
+                break;
+            }
+        }
+        if(itoPlayer == null){
+            return new ItoPlayer(this,player);
+        }
+        return itoPlayer;
+    }
 
     public void setNumbers(){
         ArrayList<Integer> numbers = numberManager.getNumbers();
