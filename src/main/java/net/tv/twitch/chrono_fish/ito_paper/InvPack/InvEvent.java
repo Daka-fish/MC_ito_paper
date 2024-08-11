@@ -2,6 +2,7 @@ package net.tv.twitch.chrono_fish.ito_paper.InvPack;
 
 import net.kyori.adventure.text.Component;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
+import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoPlayer;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ThemeManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -89,6 +90,15 @@ public class InvEvent implements Listener {
                     case SNOWBALL:
                         player.closeInventory();
                         itoInv.openThemeInv(player);
+                        break;
+
+                    case BREAD:
+                        player.closeInventory();
+                        if(itoGame.isGameRunning()){
+                            ItoPlayer itoPlayer = itoGame.findItoPlayer(player);
+                            itoPlayer.call();
+                            player.sendMessage("コールしました(コールした順番:-1)");
+                        }
                         break;
 
                     case GUNPOWDER:

@@ -40,9 +40,15 @@ public class ItoInv {
         snowMeta.displayName(Component.text("テーマを提出する"));
         snowball.setItemMeta(snowMeta);
 
+        ItemStack bread = new ItemStack(Material.BREAD);
+        ItemMeta breadMeta = bread.getItemMeta();
+        breadMeta.displayName(Component.text("コールする"));
+        bread.setItemMeta(breadMeta);
+
         menu.setItem(11,stick);
         menu.setItem(13,paper);
         menu.setItem(38,snowball);
+        menu.setItem(40,bread);
         menu.setItem(42,gunpowder);
     }
 
