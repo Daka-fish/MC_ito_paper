@@ -35,6 +35,10 @@ public class InvEvent implements Listener {
                         Player player = (Player) e.getWhoClicked();
                         ItemStack snowball = e.getInventory().getItem(0);
                         String theme = clickedItem.getItemMeta().getDisplayName();
+                        if(theme.equals("")){
+                            player.sendMessage("空のテーマは提出できません");
+                            return;
+                        }
                         e.getInventory().remove(snowball);
                         player.closeInventory();
                         itoGame.findItoPlayer(player).submitTheme(theme);
@@ -52,9 +56,17 @@ public class InvEvent implements Listener {
                     case STICK:
                         player.closeInventory();
                         if(player.hasPermission("ito_paper.menu")){
-                            player.sendMessage("ゲームを開始します");
+                            if(itoGame.getTheme().equalsIgnoreCase(itoGame.getDefaultTheme())){
+                                player.sendMessage("テーマを設定してください");
+                                return;
+                            }
+                            itoGame.setGameRunning(true);
                             itoGame.setNumbers();
-                            itoGame.getPlayers().forEach(itoPlayer -> itoPlayer.getItoBoard().resetNumber());
+                            itoGame.getPlayers().forEach(itoPlayer -> {
+                                itoPlayer.getItoBoard().resetNumber();
+                                itoPlayer.getItoBoard().switchScore(itoGame.isGameRunning());
+                                itoPlayer.getPlayer().sendMessage("ゲームを開始します。テーマは【"+itoGame.getTheme()+"】です");
+                            });
                         }else{
                             player.sendMessage("権限がありません");
                         }
@@ -67,7 +79,8 @@ public class InvEvent implements Listener {
                             Collections.shuffle(themes);
                             String theme = themes.get(0);
                             itoGame.setTheme(theme);
-                            player.sendMessage("テーマは【"+theme+"】に決定しました");
+                            itoGame.getThemeManager().getThemePool().remove(theme);
+                            player.sendMessage("テーマは【§a"+theme+"§f】に決定しました");
                         }else{
                             player.sendMessage("権限が無いか、テーマプールが空です");
                         }

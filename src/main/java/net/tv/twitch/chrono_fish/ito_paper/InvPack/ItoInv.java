@@ -42,7 +42,7 @@ public class ItoInv {
 
         menu.setItem(11,stick);
         menu.setItem(13,paper);
-        menu.setItem(39,snowball);
+        menu.setItem(38,snowball);
         menu.setItem(42,gunpowder);
     }
 
