@@ -14,9 +14,8 @@ public class ItoPlayer {
         this.itoGame = itoGame;
         this.player = player;
         number = -1;
-        this.itoBoard = new ItoBoard(itoGame,this);
+        this.itoBoard = new ItoBoard(this);
         player.setScoreboard(itoBoard.getBoard());
-        itoBoard.switchScore(itoGame.isGameRunning());
     }
 
     public Player getPlayer() {return player;}

@@ -1,6 +1,5 @@
 package net.tv.twitch.chrono_fish.ito_paper.InvPack;
 
-import net.kyori.adventure.text.Component;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoPlayer;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ThemeManager;
@@ -57,17 +56,19 @@ public class InvEvent implements Listener {
                     case STICK:
                         player.closeInventory();
                         if(player.hasPermission("ito_paper.menu")){
-                            if(itoGame.getTheme().equalsIgnoreCase(itoGame.getDefaultTheme())){
-                                player.sendMessage("テーマを設定してください");
-                                return;
+                            if(!themeManager.getThemePool().isEmpty()){
+                                ArrayList<String> themes = themeManager.getThemePool();
+                                Collections.shuffle(themes);
+                                itoGame.setTheme(themes.get(0));
+                                itoGame.setGameRunning(true);
+                                itoGame.setNumbers();
+                                itoGame.getField().clear();
+                                itoGame.broadcastItoPlayers("ゲームを開始します、テーマは【§a"+itoGame.getTheme()+"§f】です");
+                                itoGame.getPlayers().forEach(itoPlayer -> itoPlayer.getItoBoard().resetNumber());
+                                themeManager.getThemePool().remove(itoGame.getTheme());
+                            }else{
+                                player.sendMessage("テーマプールが空です");
                             }
-                            itoGame.setGameRunning(true);
-                            itoGame.setNumbers();
-                            itoGame.getPlayers().forEach(itoPlayer -> {
-                                itoPlayer.getItoBoard().resetNumber();
-                                itoPlayer.getItoBoard().switchScore(itoGame.isGameRunning());
-                                itoPlayer.getPlayer().sendMessage("ゲームを開始します。テーマは【"+itoGame.getTheme()+"】です");
-                            });
                         }else{
                             player.sendMessage("権限がありません");
                         }
@@ -75,16 +76,9 @@ public class InvEvent implements Listener {
 
                     case PAPER:
                         player.closeInventory();
-                        ArrayList<String> themes = themeManager.getThemePool();
-                        if(player.hasPermission("ito_paper.menu") && !themes.isEmpty()){
-                            Collections.shuffle(themes);
-                            String theme = themes.get(0);
-                            itoGame.setTheme(theme);
-                            itoGame.getThemeManager().getThemePool().remove(theme);
-                            player.sendMessage("テーマは【§a"+theme+"§f】に決定しました");
-                        }else{
-                            player.sendMessage("権限が無いか、テーマプールが空です");
-                        }
+                        StringBuilder themesMessage = new StringBuilder("+テーマ一覧("+themeManager.getThemePool().size()+")");
+                        themeManager.getThemePool().forEach(theme -> themesMessage.append("\n・").append(theme));
+                        itoGame.broadcastItoPlayers(themesMessage.toString());
                         break;
 
                     case SNOWBALL:
@@ -97,7 +91,7 @@ public class InvEvent implements Listener {
                         if(itoGame.isGameRunning()){
                             ItoPlayer itoPlayer = itoGame.findItoPlayer(player);
                             itoPlayer.call();
-                            player.sendMessage("コールしました(コールした順番:-1)");
+                            player.sendMessage("コールしました(コールした順番:"+(itoGame.getField().size())+")");
                         }
                         break;
 

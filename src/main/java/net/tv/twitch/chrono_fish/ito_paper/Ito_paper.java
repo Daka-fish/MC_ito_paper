@@ -1,7 +1,7 @@
 package net.tv.twitch.chrono_fish.ito_paper;
 
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.Commands;
-import net.tv.twitch.chrono_fish.ito_paper.GamePack.GameEvent;
+import net.tv.twitch.chrono_fish.ito_paper.GamePack.ServerEvent;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
 import net.tv.twitch.chrono_fish.ito_paper.InvPack.InvEvent;
 import org.bukkit.Bukkit;
@@ -14,6 +14,6 @@ public final class Ito_paper extends JavaPlugin {
         ItoGame itoGame = new ItoGame();
         getCommand("menu").setExecutor(new Commands());
         Bukkit.getPluginManager().registerEvents(new InvEvent(itoGame),this);
-        Bukkit.getPluginManager().registerEvents(new GameEvent(itoGame),this);
+        Bukkit.getPluginManager().registerEvents(new ServerEvent(itoGame),this);
     }
 }

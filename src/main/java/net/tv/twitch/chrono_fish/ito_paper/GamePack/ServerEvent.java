@@ -7,11 +7,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.ArrayList;
 
-public class GameEvent implements Listener {
+public class ServerEvent implements Listener {
 
     private final ItoGame itoGame;
 
-    public GameEvent(ItoGame itoGame){ this.itoGame = itoGame;}
+    public ServerEvent(ItoGame itoGame){ this.itoGame = itoGame;}
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e){

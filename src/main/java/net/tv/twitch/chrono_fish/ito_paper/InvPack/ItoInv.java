@@ -31,7 +31,7 @@ public class ItoInv {
 
         ItemStack paper = new ItemStack(Material.PAPER);
         ItemMeta paperMeta = paper.getItemMeta();
-        paperMeta.displayName(Component.text("テーマを選定する"));
+        paperMeta.displayName(Component.text("テーマ一覧を表示する"));
         paperMeta.lore(permissionLore);
         paper.setItemMeta(paperMeta);
 

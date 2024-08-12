@@ -1,5 +1,6 @@
 package net.tv.twitch.chrono_fish.ito_paper.GamePack;
 
+import net.tv.twitch.chrono_fish.ito_paper.ScoreboardPack.ItoBoard;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -8,7 +9,6 @@ import java.util.Collections;
 public class ItoGame {
 
     private String theme;
-    private final String defaultTheme = "テーマを設定してください";
     private final ArrayList<ItoPlayer> itoPlayers;
     private final ArrayList<ItoPlayer> field;
     private boolean GameRunning;
@@ -17,7 +17,7 @@ public class ItoGame {
     private final ThemeManager themeManager;
 
     public ItoGame(){
-        theme = defaultTheme;
+        theme = "テーマを設定してください";
         itoPlayers = new ArrayList<>();
         field = new ArrayList<>();
         GameRunning = false;
@@ -25,7 +25,6 @@ public class ItoGame {
         themeManager = new ThemeManager();
     }
 
-    public String getDefaultTheme() {return defaultTheme;}
     public void setTheme(String theme) {this.theme = theme;}
     public String getTheme() {return theme;}
     public ArrayList<ItoPlayer> getPlayers() {return itoPlayers;}
@@ -34,6 +33,12 @@ public class ItoGame {
     public void setGameRunning(boolean gameRunning) {GameRunning = gameRunning;}
 
     public ThemeManager getThemeManager() {return themeManager;}
+
+    public void broadcastItoPlayers(String message){
+        itoPlayers.forEach(itoPlayer -> {
+            itoPlayer.getPlayer().sendMessage(message);
+        });
+    }
 
     public ItoPlayer findItoPlayer(Player player){
         ItoPlayer itoPlayer = null;
