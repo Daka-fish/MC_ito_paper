@@ -3,7 +3,11 @@ package net.tv.twitch.chrono_fish.ito_paper.InvPack;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoPlayer;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ThemeManager;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -43,6 +47,11 @@ public class InvEvent implements Listener {
                         player.closeInventory();
                         itoGame.findItoPlayer(player).submitTheme(theme);
                         player.sendMessage("テーマを提出しました("+theme+")");
+                        Block block = player.getTargetBlockExact(5);
+                        if(block.getType().equals(Material.ANVIL)||block.getType().equals(Material.DAMAGED_ANVIL)
+                                ||block.getType().equals(Material.CHIPPED_ANVIL)){
+                            block.setType(Material.AIR);
+                        }
                     }
                 }
                 return;
@@ -84,6 +93,14 @@ public class InvEvent implements Listener {
                     case SNOWBALL:
                         player.closeInventory();
                         itoInv.openThemeInv(player);
+                        BlockData anvilData = Material.DAMAGED_ANVIL.createBlockData(); // 壊れかけの状態を指定
+
+                        // プレイヤーの位置に金床を召喚
+                        FallingBlock fallingAnvil = player.getWorld().spawnFallingBlock(player.getLocation(), anvilData);
+
+                        // 金床が壊れないように設定
+                        fallingAnvil.setHurtEntities(false);
+                        fallingAnvil.setDropItem(false);
                         break;
 
                     case BREAD:
