@@ -35,6 +35,12 @@ public class ItoInv {
         paperMeta.lore(permissionLore);
         paper.setItemMeta(paperMeta);
 
+        ItemStack torch = new ItemStack(Material.TORCH);
+        ItemMeta torchMeta = torch.getItemMeta();
+        torchMeta.displayName(Component.text("成功判定を行う"));
+        torchMeta.lore(permissionLore);
+        torch.setItemMeta(torchMeta);
+
         ItemStack snowball = new ItemStack(Material.SNOWBALL);
         ItemMeta snowMeta = snowball.getItemMeta();
         snowMeta.displayName(Component.text("テーマを提出する"));
@@ -47,6 +53,7 @@ public class ItoInv {
 
         menu.setItem(11,stick);
         menu.setItem(13,paper);
+        menu.setItem(15,torch);
         menu.setItem(38,snowball);
         menu.setItem(40,bread);
         menu.setItem(42,gunpowder);

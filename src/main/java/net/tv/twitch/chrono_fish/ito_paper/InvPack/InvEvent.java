@@ -90,15 +90,22 @@ public class InvEvent implements Listener {
                         itoGame.broadcastItoPlayers(themesMessage.toString());
                         break;
 
+                    case TORCH:
+                        player.closeInventory();
+                        if(itoGame.isGameRunning()){
+                            itoGame.check();
+                        }else{
+                            player.sendMessage("ゲームが開始されていません");
+                        }
+                        break;
+
                     case SNOWBALL:
                         player.closeInventory();
                         itoInv.openThemeInv(player);
-                        BlockData anvilData = Material.DAMAGED_ANVIL.createBlockData(); // 壊れかけの状態を指定
+                        BlockData anvilData = Material.DAMAGED_ANVIL.createBlockData();
 
-                        // プレイヤーの位置に金床を召喚
                         FallingBlock fallingAnvil = player.getWorld().spawnFallingBlock(player.getLocation(), anvilData);
 
-                        // 金床が壊れないように設定
                         fallingAnvil.setHurtEntities(false);
                         fallingAnvil.setDropItem(false);
                         break;

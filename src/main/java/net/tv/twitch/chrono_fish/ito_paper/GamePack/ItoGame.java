@@ -1,6 +1,5 @@
 package net.tv.twitch.chrono_fish.ito_paper.GamePack;
 
-import net.tv.twitch.chrono_fish.ito_paper.ScoreboardPack.ItoBoard;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ public class ItoGame {
     private String theme;
     private final ArrayList<ItoPlayer> itoPlayers;
     private final ArrayList<ItoPlayer> field;
-    private boolean GameRunning;
+    private boolean gameRunning;
 
     private final NumberManager numberManager;
     private final ThemeManager themeManager;
@@ -20,7 +19,7 @@ public class ItoGame {
         theme = "テーマを設定してください";
         itoPlayers = new ArrayList<>();
         field = new ArrayList<>();
-        GameRunning = false;
+        gameRunning = false;
         numberManager = new NumberManager();
         themeManager = new ThemeManager();
     }
@@ -29,8 +28,8 @@ public class ItoGame {
     public String getTheme() {return theme;}
     public ArrayList<ItoPlayer> getPlayers() {return itoPlayers;}
     public ArrayList<ItoPlayer> getField() {return field;}
-    public boolean isGameRunning() {return GameRunning;}
-    public void setGameRunning(boolean gameRunning) {GameRunning = gameRunning;}
+    public boolean isGameRunning() {return gameRunning;}
+    public void setGameRunning(boolean gameRunning) {this.gameRunning = gameRunning;}
 
     public ThemeManager getThemeManager() {return themeManager;}
 
@@ -64,13 +63,18 @@ public class ItoGame {
         }
     }
 
-    public boolean check(){
+    public void check(){
         ArrayList<Integer> sortNumber = new ArrayList<>();
         for(ItoPlayer itoPlayer : field){
             sortNumber.add(itoPlayer.getNumber());
         }
         ArrayList<Integer> notSortNumber = sortNumber;
         Collections.sort(sortNumber);
-        return sortNumber.equals(notSortNumber);
+        if(sortNumber.equals(notSortNumber)){
+            broadcastItoPlayers("成功");
+        }else{
+            broadcastItoPlayers("失敗");
+        }
+        gameRunning = false;
     }
 }
