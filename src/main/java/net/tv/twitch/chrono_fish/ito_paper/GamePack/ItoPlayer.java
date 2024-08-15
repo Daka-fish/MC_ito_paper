@@ -7,6 +7,7 @@ public class ItoPlayer {
     private final ItoGame itoGame;
     private final Player player;
     private int number;
+    private boolean hasCall;
 
     private final ItoBoard itoBoard;
 
@@ -14,6 +15,7 @@ public class ItoPlayer {
         this.itoGame = itoGame;
         this.player = player;
         number = -1;
+        hasCall = false;
         this.itoBoard = new ItoBoard(this);
         player.setScoreboard(itoBoard.getBoard());
     }
@@ -23,6 +25,9 @@ public class ItoPlayer {
 
     public int getNumber() {return number;}
     public void setNumber(int number) {this.number = number;}
+
+    public boolean hasCall() {return hasCall;}
+    public void setHasCall(boolean hasCall) {this.hasCall = hasCall;}
 
     public void submitTheme(String theme){itoGame.getThemeManager().getThemePool().add(theme);}
     public void call(){itoGame.getField().add(this);}

@@ -2,7 +2,6 @@ package net.tv.twitch.chrono_fish.ito_paper.ScoreboardPack;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.*;
@@ -49,5 +48,9 @@ public class ItoBoard {
         board.resetScores(yourNumber);
         yourNumber = " └ §e"+itoPlayer.getNumber();
         obj.getScore(yourNumber).setScore(-2);
+    }
+
+    public void addCaller(){
+
     }
 }

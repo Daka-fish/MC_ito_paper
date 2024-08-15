@@ -3,7 +3,6 @@ package net.tv.twitch.chrono_fish.ito_paper.InvPack;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoPlayer;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ThemeManager;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -40,7 +39,7 @@ public class InvEvent implements Listener {
                         ItemStack snowball = e.getInventory().getItem(0);
                         String theme = clickedItem.getItemMeta().getDisplayName();
                         if(theme.equals("")){
-                            player.sendMessage("空のテーマは提出できません");
+                            player.sendMessage("§f空のテーマは提出できません");
                             return;
                         }
                         e.getInventory().remove(snowball);
@@ -76,10 +75,10 @@ public class InvEvent implements Listener {
                                 itoGame.getPlayers().forEach(itoPlayer -> itoPlayer.getItoBoard().resetNumber());
                                 themeManager.getThemePool().remove(itoGame.getTheme());
                             }else{
-                                player.sendMessage("テーマプールが空です");
+                                player.sendMessage("§fテーマプールが空です");
                             }
                         }else{
-                            player.sendMessage("権限がありません");
+                            player.sendMessage("§f権限がありません");
                         }
                         break;
 
@@ -95,7 +94,7 @@ public class InvEvent implements Listener {
                         if(itoGame.isGameRunning()){
                             itoGame.check();
                         }else{
-                            player.sendMessage("ゲームが開始されていません");
+                            player.sendMessage("§fゲームが開始されていません");
                         }
                         break;
 
@@ -114,8 +113,13 @@ public class InvEvent implements Listener {
                         player.closeInventory();
                         if(itoGame.isGameRunning()){
                             ItoPlayer itoPlayer = itoGame.findItoPlayer(player);
-                            itoPlayer.call();
-                            player.sendMessage("コールしました(コールした順番:"+(itoGame.getField().size())+")");
+                            if(!itoPlayer.hasCall()){
+                                itoPlayer.call();
+                                itoGame.broadcastItoPlayers("§e"+player.getName()+"§fがコールしました(コールした順番:"+(itoGame.getField().size())+")");
+                                itoGame.getPlayers().forEach(ip ->ip.getItoBoard().addCaller());
+                            }else{
+                                player.sendMessage("§c既にコールしています");
+                            }
                         }
                         break;
 
