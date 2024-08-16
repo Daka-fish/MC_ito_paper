@@ -2,7 +2,7 @@ package net.tv.twitch.chrono_fish.ito_paper.InvPack;
 
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoPlayer;
-import net.tv.twitch.chrono_fish.ito_paper.GamePack.ThemeManager;
+import net.tv.twitch.chrono_fish.ito_paper.Manager.ThemeManager;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -39,7 +39,7 @@ public class InvEvent implements Listener {
                         ItemStack snowball = e.getInventory().getItem(0);
                         String theme = clickedItem.getItemMeta().getDisplayName();
                         if(theme.equals("")){
-                            player.sendMessage("§f空のテーマは提出できません");
+                            player.sendMessage("§c空のテーマは提出できません");
                             return;
                         }
                         e.getInventory().remove(snowball);
@@ -71,14 +71,18 @@ public class InvEvent implements Listener {
                                 itoGame.setGameRunning(true);
                                 itoGame.setNumbers();
                                 itoGame.getField().clear();
+                                itoGame.getPlayers().forEach(itoPlayer -> {
+                                    itoPlayer.getItoBoard().reloadNumber();
+                                    itoPlayer.getItoBoard().reloadTheme();
+                                });
                                 itoGame.broadcastItoPlayers("ゲームを開始します、テーマは【§a"+itoGame.getTheme()+"§f】です");
-                                itoGame.getPlayers().forEach(itoPlayer -> itoPlayer.getItoBoard().resetNumber());
                                 themeManager.getThemePool().remove(itoGame.getTheme());
+                                return;
                             }else{
-                                player.sendMessage("§fテーマプールが空です");
+                                player.sendMessage("§cテーマプールが空です");
                             }
                         }else{
-                            player.sendMessage("§f権限がありません");
+                            player.sendMessage("§c権限がありません");
                         }
                         break;
 
@@ -92,9 +96,13 @@ public class InvEvent implements Listener {
                     case TORCH:
                         player.closeInventory();
                         if(itoGame.isGameRunning()){
+                            if(itoGame.getField().size() < itoGame.getPlayers().size()){
+                                player.sendMessage("§cコールの数が不足しています(あと§a"+(itoGame.getPlayers().size()-itoGame.getField().size())+"§c人)");
+                                return;
+                            }
                             itoGame.check();
                         }else{
-                            player.sendMessage("§fゲームが開始されていません");
+                            player.sendMessage("§cゲームが開始されていません");
                         }
                         break;
 
@@ -116,10 +124,15 @@ public class InvEvent implements Listener {
                             if(!itoPlayer.hasCall()){
                                 itoPlayer.call();
                                 itoGame.broadcastItoPlayers("§e"+player.getName()+"§fがコールしました(コールした順番:"+(itoGame.getField().size())+")");
-                                itoGame.getPlayers().forEach(ip ->ip.getItoBoard().addCaller());
+                                itoPlayer.setCallOrder(itoGame.getField().size());
+                                itoPlayer.getItoBoard().reloadCallOrder();
+                                itoPlayer.setHasCall(true);
+                                return;
                             }else{
                                 player.sendMessage("§c既にコールしています");
                             }
+                        }else{
+                            player.sendMessage("§cゲームが開始されていません");
                         }
                         break;
 

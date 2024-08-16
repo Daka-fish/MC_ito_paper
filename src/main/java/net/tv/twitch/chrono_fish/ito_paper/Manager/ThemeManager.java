@@ -1,4 +1,4 @@
-package net.tv.twitch.chrono_fish.ito_paper.GamePack;
+package net.tv.twitch.chrono_fish.ito_paper.Manager;
 
 import java.util.ArrayList;
 

@@ -11,7 +11,7 @@ public final class Ito_paper extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        ItoGame itoGame = new ItoGame();
+        ItoGame itoGame = new ItoGame(this);
         getCommand("menu").setExecutor(new Commands());
         Bukkit.getPluginManager().registerEvents(new InvEvent(itoGame),this);
         Bukkit.getPluginManager().registerEvents(new ServerEvent(itoGame),this);

@@ -7,6 +7,7 @@ public class ItoPlayer {
     private final ItoGame itoGame;
     private final Player player;
     private int number;
+    private int callOrder;
     private boolean hasCall;
 
     private final ItoBoard itoBoard;
@@ -14,9 +15,10 @@ public class ItoPlayer {
     public ItoPlayer(ItoGame itoGame, Player player){
         this.itoGame = itoGame;
         this.player = player;
-        number = -1;
-        hasCall = false;
-        this.itoBoard = new ItoBoard(this);
+        this.number = -1;
+        this.callOrder = -1;
+        this.hasCall = false;
+        this.itoBoard = new ItoBoard(itoGame, this);
         player.setScoreboard(itoBoard.getBoard());
     }
 
@@ -25,6 +27,9 @@ public class ItoPlayer {
 
     public int getNumber() {return number;}
     public void setNumber(int number) {this.number = number;}
+
+    public int getCallOrder() {return callOrder;}
+    public void setCallOrder(int callOrder) {this.callOrder = callOrder;}
 
     public boolean hasCall() {return hasCall;}
     public void setHasCall(boolean hasCall) {this.hasCall = hasCall;}
