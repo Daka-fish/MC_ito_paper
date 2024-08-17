@@ -3,8 +3,6 @@ package net.tv.twitch.chrono_fish.ito_paper.InvPack;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -43,7 +41,7 @@ public class ItoInv {
 
         ItemStack snowball = new ItemStack(Material.SNOWBALL);
         ItemMeta snowMeta = snowball.getItemMeta();
-        snowMeta.displayName(Component.text("テーマを提出する"));
+        snowMeta.displayName(Component.text("テーマを変更する"));
         snowball.setItemMeta(snowMeta);
 
         ItemStack bread = new ItemStack(Material.BREAD);
@@ -61,14 +59,4 @@ public class ItoInv {
 
     public Inventory getMenu() {return menu;}
     public Component getMenuTitle() {return menuTitle;}
-
-    public void openThemeInv(Player player){
-        Inventory anvilInventory = player.getServer().createInventory(player, InventoryType.ANVIL, Component.text("テーマを入力"));
-        ItemStack snowball = new ItemStack(Material.SNOWBALL);
-        ItemMeta snowMeta = snowball.getItemMeta();
-        snowMeta.displayName(Component.text(""));
-        snowball.setItemMeta(snowMeta);
-        anvilInventory.setItem(0,snowball);
-        player.openInventory(anvilInventory);
-    }
 }

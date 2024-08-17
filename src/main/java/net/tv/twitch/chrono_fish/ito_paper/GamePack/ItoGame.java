@@ -46,7 +46,7 @@ public class ItoGame {
         });
     }
 
-    public ItoPlayer findItoPlayer(Player player){
+    public ItoPlayer getItoPlayer(Player player){
         ItoPlayer itoPlayer = null;
         for (ItoPlayer ip : itoPlayers) {
             if (ip.getPlayer().equals(player)) {

@@ -3,26 +3,21 @@ package net.tv.twitch.chrono_fish.ito_paper.InvPack;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoPlayer;
 import net.tv.twitch.chrono_fish.ito_paper.Manager.ThemeManager;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class InvEvent implements Listener {
+public class InvListener implements Listener {
     private final ItoGame itoGame;
     private final ThemeManager themeManager;
     private final ItoInv itoInv;
 
-    public InvEvent(ItoGame itoGame){
+    public InvListener(ItoGame itoGame){
         this.itoGame = itoGame;
         this.themeManager = itoGame.getThemeManager();
         itoInv = new ItoInv();
@@ -31,30 +26,6 @@ public class InvEvent implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent e){
         if(e.getClickedInventory() != null){
-            if(e.getInventory().getType().equals(InventoryType.ANVIL)){
-                if(e.getCurrentItem() != null){
-                    ItemStack clickedItem = e.getCurrentItem();
-                    if(clickedItem.getType().equals(Material.SNOWBALL) && e.getRawSlot() == 2){
-                        Player player = (Player) e.getWhoClicked();
-                        ItemStack snowball = e.getInventory().getItem(0);
-                        String theme = clickedItem.getItemMeta().getDisplayName();
-                        if(theme.equals("")){
-                            player.sendMessage("§c空のテーマは提出できません");
-                            return;
-                        }
-                        e.getInventory().remove(snowball);
-                        player.closeInventory();
-                        itoGame.findItoPlayer(player).submitTheme(theme);
-                        player.sendMessage("テーマを提出しました("+theme+")");
-                        Block block = player.getTargetBlockExact(5);
-                        if(block.getType().equals(Material.ANVIL)||block.getType().equals(Material.DAMAGED_ANVIL)
-                                ||block.getType().equals(Material.CHIPPED_ANVIL)){
-                            block.setType(Material.AIR);
-                        }
-                    }
-                }
-                return;
-            }
             if(e.getCurrentItem() != null && e.getView().title().equals(itoInv.getMenuTitle())){
                 e.setCancelled(true);
                 Player player = (Player) e.getWhoClicked();
@@ -108,19 +79,26 @@ public class InvEvent implements Listener {
 
                     case SNOWBALL:
                         player.closeInventory();
-                        itoInv.openThemeInv(player);
-                        BlockData anvilData = Material.DAMAGED_ANVIL.createBlockData();
-
-                        FallingBlock fallingAnvil = player.getWorld().spawnFallingBlock(player.getLocation(), anvilData);
-
-                        fallingAnvil.setHurtEntities(false);
-                        fallingAnvil.setDropItem(false);
+                        if(player.hasPermission("ito_paper.menu") && itoGame.isGameRunning()){
+                            if(!itoGame.getThemeManager().getThemePool().isEmpty()){
+                                ArrayList<String> themes = themeManager.getThemePool();
+                                Collections.shuffle(themes);
+                                itoGame.setTheme(themes.get(0));
+                                itoGame.getPlayers().forEach(itoPlayer -> itoPlayer.getItoBoard().reloadTheme());
+                                themeManager.getThemePool().remove(itoGame.getTheme());
+                                itoGame.broadcastItoPlayers("テーマが【§a"+itoGame.getTheme()+"§f】に変更されました(残り:"+themeManager.getThemePool().size()+")");
+                            }else{
+                                player.sendMessage("§cテーマプールが空のため変更できません");
+                            }
+                        }else{
+                            player.sendMessage("権限がないか、進行中のゲームがありません");
+                        }
                         break;
 
                     case BREAD:
                         player.closeInventory();
                         if(itoGame.isGameRunning()){
-                            ItoPlayer itoPlayer = itoGame.findItoPlayer(player);
+                            ItoPlayer itoPlayer = itoGame.getItoPlayer(player);
                             if(!itoPlayer.hasCall()){
                                 itoPlayer.call();
                                 itoGame.broadcastItoPlayers("§e"+player.getName()+"§fがコールしました(コールした順番:"+(itoGame.getField().size())+")");
