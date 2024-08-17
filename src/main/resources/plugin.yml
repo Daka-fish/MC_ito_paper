@@ -8,6 +8,7 @@ commands:
     permission: ito_paper.sign
   menu:
     permission: ito_paper.menu
+  ito:
 permissions:
   ito_paper.menu:
     default: op

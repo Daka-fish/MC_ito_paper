@@ -42,11 +42,12 @@ public class InvListener implements Listener {
                                 itoGame.setGameRunning(true);
                                 itoGame.setNumbers();
                                 itoGame.getField().clear();
+                                itoGame.getIto_paper().putLogger("§e"+player.getName()+"starts the game with "+itoGame.getTheme()+".");
                                 itoGame.getPlayers().forEach(itoPlayer -> {
                                     itoPlayer.getItoBoard().reloadNumber();
                                     itoPlayer.getItoBoard().reloadTheme();
                                 });
-                                itoGame.broadcastItoPlayers("ゲームを開始します、テーマは【§a"+itoGame.getTheme()+"§f】です");
+                                itoGame.sendMessage("ゲームを開始します、テーマは【§a"+itoGame.getTheme()+"§f】です");
                                 themeManager.getThemePool().remove(itoGame.getTheme());
                                 return;
                             }else{
@@ -61,7 +62,7 @@ public class InvListener implements Listener {
                         player.closeInventory();
                         StringBuilder themesMessage = new StringBuilder("+テーマ一覧("+themeManager.getThemePool().size()+")");
                         themeManager.getThemePool().forEach(theme -> themesMessage.append("\n・").append(theme));
-                        itoGame.broadcastItoPlayers(themesMessage.toString());
+                        itoGame.sendMessage(themesMessage.toString());
                         break;
 
                     case TORCH:
@@ -86,7 +87,7 @@ public class InvListener implements Listener {
                                 itoGame.setTheme(themes.get(0));
                                 itoGame.getPlayers().forEach(itoPlayer -> itoPlayer.getItoBoard().reloadTheme());
                                 themeManager.getThemePool().remove(itoGame.getTheme());
-                                itoGame.broadcastItoPlayers("テーマが【§a"+itoGame.getTheme()+"§f】に変更されました(残り:"+themeManager.getThemePool().size()+")");
+                                itoGame.sendMessage("テーマが【§a"+itoGame.getTheme()+"§f】に変更されました(残り:"+themeManager.getThemePool().size()+")");
                             }else{
                                 player.sendMessage("§cテーマプールが空のため変更できません");
                             }
@@ -101,7 +102,7 @@ public class InvListener implements Listener {
                             ItoPlayer itoPlayer = itoGame.getItoPlayer(player);
                             if(!itoPlayer.hasCall()){
                                 itoPlayer.call();
-                                itoGame.broadcastItoPlayers("§e"+player.getName()+"§fがコールしました(コールした順番:"+(itoGame.getField().size())+")");
+                                itoGame.sendMessage("§e"+player.getName()+"§fがコールしました(コールした順番:"+(itoGame.getField().size())+")");
                                 itoPlayer.setCallOrder(itoGame.getField().size());
                                 itoPlayer.getItoBoard().reloadCallOrder();
                                 itoPlayer.setHasCall(true);
