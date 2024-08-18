@@ -85,9 +85,17 @@ public class ItoGame {
             }
         }
         if(success){
-            sendMessage("成功");
+            sendMessage("+成功");
+            for(ItoPlayer itoPlayer : field){
+                sendMessage("\n"+itoPlayer.getNumber()+" :"+itoPlayer.getPlayer().getName());
+                itoPlayer.getPlayer().giveExp(5);
+            }
         }else{
-            sendMessage("失敗");
+            sendMessage("+失敗");
+            for(ItoPlayer itoPlayer : field){
+                sendMessage("\n"+itoPlayer.getNumber()+" :"+itoPlayer.getPlayer().getName());
+                itoPlayer.getPlayer().giveExp(1);
+            }
         }
         gameRunning = false;
         field.sort(Comparator.comparingInt(ItoPlayer::getNumber));

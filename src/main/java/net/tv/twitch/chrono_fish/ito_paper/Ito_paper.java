@@ -18,7 +18,5 @@ public final class Ito_paper extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ServerListener(itoGame),this);
     }
 
-    public void putLogger(String message){
-        getLogger().info(message);
-    }
+    public void putLogger(String message){getLogger().info(message);}
 }
