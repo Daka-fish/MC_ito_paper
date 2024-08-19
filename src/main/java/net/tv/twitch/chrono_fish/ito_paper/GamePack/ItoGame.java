@@ -14,6 +14,7 @@ public class ItoGame {
 
     private final Ito_paper ito_paper;
 
+    private final ItoConfig itoConfig;
     private Location gameLocation;
 
     private String theme;
@@ -26,7 +27,8 @@ public class ItoGame {
 
     public ItoGame(Ito_paper ito_paper){
         this.ito_paper = ito_paper;
-        this.gameLocation = new Location(ito_paper.getServer().getWorld("world"), 8.5,63,24);
+        this.itoConfig = new ItoConfig(ito_paper,this);
+        this.gameLocation = itoConfig.getSignLocation();
         this.theme = "テーマを設定してください";
         this.itoPlayers = new ArrayList<>();
         this.field = new ArrayList<>();
@@ -36,6 +38,11 @@ public class ItoGame {
     }
 
     public Ito_paper getIto_paper() {return ito_paper;}
+    public Location getGameLocation() {return gameLocation;}
+    public void setGameLocation(Location location) {
+        this.gameLocation = location;
+        itoConfig.setSignLocation(location);
+    }
     public void setTheme(String theme) {this.theme = theme;}
     public String getTheme() {return theme;}
     public ArrayList<ItoPlayer> getPlayers() {return itoPlayers;}
@@ -44,6 +51,7 @@ public class ItoGame {
     public void setGameRunning(boolean gameRunning) {this.gameRunning = gameRunning;}
 
     public ThemeManager getThemeManager() {return themeManager;}
+    public ItoConfig getItoConfig() {return itoConfig;}
 
     public void sendMessage(String message){
         itoPlayers.forEach(itoPlayer -> {

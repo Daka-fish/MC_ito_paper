@@ -10,6 +10,10 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.Rotatable;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -37,17 +41,29 @@ public class Commands implements CommandExecutor {
                     return false;
                 }
             }
-            if(command.getName().equalsIgnoreCase("sign")) {
-                Location location = snd.getLocation();
-                Block block = location.getBlock();
-                block.setType(Material.ACACIA_SIGN);
 
-                Sign sign = (Sign) block.getState();
+            if (command.getName().equalsIgnoreCase("sign")) {
+                Block targetBlock = snd.getTargetBlockExact(5); // プレイヤーが見ているブロックを取得
+                if (targetBlock != null) {
+                    Block signBlock = targetBlock.getRelative(snd.getFacing().getOppositeFace()); // そのブロックに対して、反対側に壁掛け看板を設置
 
-                sign.line(0,Component.text("ENTER THE THEME"));
-                sign.update();
-                snd.sendMessage("識別子付きの看板を設置しました");
+                    signBlock.setType(Material.ACACIA_WALL_SIGN); // 壁掛け看板を設置
+                    WallSign sign = (WallSign) signBlock.getBlockData();
+                    sign.setFacing(snd.getFacing()); // プレイヤーの向いている方向に看板が向くように設定
+                    signBlock.setBlockData(sign);
+
+                    Sign signState = (Sign) signBlock.getState();
+                    signState.line(0, Component.text("ENTER THE THEME"));
+                    signState.update();
+
+                    itoGame.setGameLocation(signBlock.getLocation());
+                    snd.sendMessage("看板を設置しました");
+                } else {
+                    snd.sendMessage("看板を設置する場所が見つかりませんでした");
+                }
+                return false;
             }
+
             if(command.getName().equalsIgnoreCase("ito")){
                 if(args.length == 1){
                     if(args[0].equalsIgnoreCase("leave")){
@@ -65,6 +81,7 @@ public class Commands implements CommandExecutor {
                     }
                 }
             }
+
         }
         return false;
     }

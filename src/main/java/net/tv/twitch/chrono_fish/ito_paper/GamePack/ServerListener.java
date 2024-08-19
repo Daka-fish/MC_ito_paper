@@ -33,8 +33,7 @@ public class ServerListener implements Listener {
     @EventHandler
     public void onSign(SignChangeEvent e){
         if(e.getBlock().getType().equals(Material.ACACIA_SIGN)){
-            Sign sign = (Sign) e.getBlock().getState();
-            if(e.line(0).equals(Component.text("ENTER THE THEME"))){
+            if(e.line(0).equals(Component.text("ENTER THE THEME")) && itoGame.getItoConfig().equalGameLocation(e.getBlock().getLocation())){
                 StringBuilder theme = new StringBuilder();
                 for(int i=1; i<4; i++) theme.append(e.getLine(i));
                 itoGame.getItoPlayer(e.getPlayer()).sendTheme(theme.toString());
