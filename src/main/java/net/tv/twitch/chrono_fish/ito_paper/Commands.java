@@ -66,6 +66,9 @@ public class Commands implements CommandExecutor {
 
             if(command.getName().equalsIgnoreCase("ito")){
                 if(args.length == 1){
+                    if(args[0].equalsIgnoreCase("start")){
+
+                    }
                     if(args[0].equalsIgnoreCase("leave")){
                         ItoPlayer itoPlayer = itoGame.getItoPlayer(snd);
                         itoGame.getPlayers().remove(itoPlayer);
