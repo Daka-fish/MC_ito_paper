@@ -4,8 +4,6 @@ main: net.tv.twitch.chrono_fish.ito_paper.Ito_paper
 api-version: '1.20'
 description: 'This is a custom plugin for playing "ito".'
 commands:
-  sign:
-    permission: ito_paper.sign
   menu:
     permission: ito_paper.menu
   ito:

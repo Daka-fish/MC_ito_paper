@@ -20,6 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.DisplaySlot;
 
@@ -42,44 +43,32 @@ public class Commands implements CommandExecutor {
                 }
             }
 
-            if (command.getName().equalsIgnoreCase("sign")) {
-                Block targetBlock = snd.getTargetBlockExact(5); // プレイヤーが見ているブロックを取得
-                if (targetBlock != null) {
-                    Block signBlock = targetBlock.getRelative(snd.getFacing().getOppositeFace()); // そのブロックに対して、反対側に壁掛け看板を設置
-
-                    signBlock.setType(Material.ACACIA_WALL_SIGN); // 壁掛け看板を設置
-                    WallSign sign = (WallSign) signBlock.getBlockData();
-                    sign.setFacing(snd.getFacing()); // プレイヤーの向いている方向に看板が向くように設定
-                    signBlock.setBlockData(sign);
-
-                    Sign signState = (Sign) signBlock.getState();
-                    signState.line(0, Component.text("ENTER THE THEME"));
-                    signState.update();
-
-                    itoGame.setGameLocation(signBlock.getLocation());
-                    snd.sendMessage("看板を設置しました");
-                } else {
-                    snd.sendMessage("看板を設置する場所が見つかりませんでした");
-                }
-                return false;
-            }
-
             if(command.getName().equalsIgnoreCase("ito")){
-                if(args.length == 1){
+                if(args.length >= 1){
                     if(args[0].equalsIgnoreCase("start")){
-
+                        ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+                        BookMeta meta = (BookMeta) book.getItemMeta();
+                        meta.setTitle("Game Book");
+                        meta.setAuthor("itoへようこそ");
+                        meta.addPages(Component.text("welcome to ito"));
+                        book.setItemMeta(meta);
+                        snd.getInventory().addItem(book);
                     }
+
                     if(args[0].equalsIgnoreCase("leave")){
                         ItoPlayer itoPlayer = itoGame.getItoPlayer(snd);
-                        itoGame.getPlayers().remove(itoPlayer);
                         itoPlayer.getPlayer().getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
                         snd.sendMessage("§c"+"itoから退室しました");
+                        itoGame.getPlayers().remove(itoPlayer);
+                        itoGame.putLogger(itoPlayer.getPlayer().getName()+" has left from ito.");
                         return false;
                     }
+
                     if(args[0].equalsIgnoreCase("join")){
                         ItoPlayer itoPlayer = new ItoPlayer(itoGame,snd);
-                        itoGame.getPlayers().add(itoPlayer);
                         snd.sendMessage("itoに参加しました");
+                        itoGame.getPlayers().add(itoPlayer);
+                        itoGame.putLogger(itoPlayer.getPlayer().getName()+" has joined to ito.");
                         return false;
                     }
                 }

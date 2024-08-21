@@ -5,7 +5,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -34,12 +36,15 @@ public class ServerListener implements Listener {
     public void onSign(SignChangeEvent e){
         if(e.getBlock().getType().equals(Material.ACACIA_SIGN)){
             StringBuilder theme = new StringBuilder();
-            for(int i=1; i<4; i++) theme.append(e.getLine(i));
-            itoGame.getItoPlayer(e.getPlayer()).sendTheme(theme.toString());
+            for(int i=0; i<4; i++) theme.append(e.getLine(i));
+            ItoPlayer itoPlayer = itoGame.getItoPlayer(e.getPlayer());
+            itoPlayer.sendTheme(theme.toString());
             e.getPlayer().sendMessage("テーマを送信しました("+theme+")");
-            e.setLine(1,"");
-            e.setLine(2,"");
-            e.setLine(3,"");
+            itoGame.putLogger(itoPlayer.getPlayer().getName()+" send a theme, "+theme+".");
+            e.line(0,Component.text(""));
+            e.line(1,Component.text(""));
+            e.line(2,Component.text(""));
+            e.line(3,Component.text(""));
         }
     }
 }

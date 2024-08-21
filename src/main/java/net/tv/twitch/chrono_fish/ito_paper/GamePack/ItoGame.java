@@ -21,6 +21,7 @@ public class ItoGame {
     private final ArrayList<ItoPlayer> itoPlayers;
     private final ArrayList<ItoPlayer> field;
     private boolean gameRunning;
+    private boolean console;
 
     private final NumberManager numberManager;
     private final ThemeManager themeManager;
@@ -33,6 +34,7 @@ public class ItoGame {
         this.itoPlayers = new ArrayList<>();
         this.field = new ArrayList<>();
         this.gameRunning = false;
+        this.console = true;
         this.numberManager = new NumberManager();
         this.themeManager = new ThemeManager();
     }
@@ -49,6 +51,7 @@ public class ItoGame {
     public ArrayList<ItoPlayer> getField() {return field;}
     public boolean isGameRunning() {return gameRunning;}
     public void setGameRunning(boolean gameRunning) {this.gameRunning = gameRunning;}
+    public void setConsole(boolean console) {this.console = console;}
 
     public ThemeManager getThemeManager() {return themeManager;}
     public ItoConfig getItoConfig() {return itoConfig;}
@@ -57,6 +60,12 @@ public class ItoGame {
         itoPlayers.forEach(itoPlayer -> {
             itoPlayer.getPlayer().sendMessage(message);
         });
+    }
+
+    public void putLogger(String message){
+        if(console){
+            ito_paper.putLogger(message);
+        }
     }
 
     public ItoPlayer getItoPlayer(Player player){

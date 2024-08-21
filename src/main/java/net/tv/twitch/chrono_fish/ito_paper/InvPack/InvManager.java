@@ -27,7 +27,7 @@ public class InvManager {
                         itoGame.setGameRunning(true);
                         itoGame.setNumbers();
                         itoGame.getField().clear();
-                        itoGame.getIto_paper().putLogger(player.getName()+" starts the game with "+itoGame.getTheme()+".");
+                        itoGame.putLogger(player.getName()+" starts the game with "+itoGame.getTheme()+".");
                         itoGame.getPlayers().forEach(itoPlayer -> {
                             itoPlayer.getItoBoard().reloadNumber();
                             itoPlayer.getItoBoard().reloadTheme();
