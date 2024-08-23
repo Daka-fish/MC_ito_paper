@@ -41,14 +41,14 @@ public class ItoConfig {
         ito_paper.saveConfig();
     }
 
-    public boolean equalGameLocation(Location location){
-        Location loc1 = itoGame.getGameLocation();
-        System.out.println(loc1);
-        System.out.println(location);
-        double tolerance = 1.5;
-        return loc1.getWorld().equals(location.getWorld())
-                && Math.abs(loc1.getBlockX() - location.getBlockX()) < tolerance
-                && Math.abs(loc1.getBlockY() - location.getBlockY()) < tolerance
-                && Math.abs(loc1.getBlockZ() - location.getBlockZ()) < tolerance;
+    public void equalGameLocation(Location location){
+//        Location loc1 = itoGame.getGameLocation();
+//        System.out.println(loc1);
+//        System.out.println(location);
+//        double tolerance = 1.5;
+//        return loc1.getWorld().equals(location.getWorld())
+//                && Math.abs(loc1.getBlockX() - location.getBlockX()) < tolerance
+//                && Math.abs(loc1.getBlockY() - location.getBlockY()) < tolerance
+//                && Math.abs(loc1.getBlockZ() - location.getBlockZ()) < tolerance;
     }
 }

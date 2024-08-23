@@ -1,6 +1,9 @@
 package net.tv.twitch.chrono_fish.ito_paper;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoPlayer;
 import net.tv.twitch.chrono_fish.ito_paper.InvPack.ItoInv;
@@ -36,23 +39,33 @@ public class Commands implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (sender instanceof Player) {
             Player snd = (Player) sender;
-            if(command.getName().equalsIgnoreCase("menu")) {
-                if(args.length == 0){
-                    snd.openInventory(new ItoInv().getMenu());
-                    return false;
-                }
-            }
 
             if(command.getName().equalsIgnoreCase("ito")){
                 if(args.length >= 1){
                     if(args[0].equalsIgnoreCase("start")){
-                        ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
-                        BookMeta meta = (BookMeta) book.getItemMeta();
-                        meta.setTitle("Game Book");
-                        meta.setAuthor("itoへようこそ");
-                        meta.addPages(Component.text("welcome to ito"));
-                        book.setItemMeta(meta);
-                        snd.getInventory().addItem(book);
+                        for(ItoPlayer itoPlayer : itoGame.getPlayers()){
+                            itoPlayer.getPlayer().getInventory().addItem(new ItemStack(Material.STICK));
+                        }
+                        itoGame.setGameRunning(true);
+                        snd.sendMessage("ゲームを開始します");
+                    }
+
+                    if(args[0].equalsIgnoreCase("gm")){
+                        snd.getInventory().addItem(new ItemStack(Material.STICK));
+//                        ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+//                        BookMeta meta = (BookMeta) book.getItemMeta();
+//                        meta.setTitle("Game Book");
+//                        meta.setAuthor("You are the Game Master");
+//                        meta.addPages(Component.text("\n\n+Itoを開始します")
+//                                    .decorate(TextDecoration.UNDERLINED)
+//                                    .clickEvent(ClickEvent.runCommand("/ito start"))
+//                                    .hoverEvent(HoverEvent.showText(Component.text("クリックでゲームを開始します")))
+//                                .append((Component.text("\n\n参加者一覧を表示します")
+//                                        .decorate(TextDecoration.UNDERLINED)
+//                                        .clickEvent(ClickEvent.runCommand("/ito list"))
+//                                        .hoverEvent(HoverEvent.showText(Component.text("クリックで参加者一覧を表示します"))))));
+//                        book.setItemMeta(meta);
+//                        snd.getInventory().addItem(book);
                     }
 
                     if(args[0].equalsIgnoreCase("leave")){

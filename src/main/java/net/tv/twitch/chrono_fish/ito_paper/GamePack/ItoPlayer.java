@@ -34,6 +34,10 @@ public class ItoPlayer {
     public boolean hasCall() {return hasCall;}
     public void setHasCall(boolean hasCall) {this.hasCall = hasCall;}
 
-    public void sendTheme(String theme){itoGame.getThemeManager().getThemePool().add(theme);}
+    public void sendTheme(String theme){
+        itoGame.getThemeManager().getThemePool().add(theme);
+        itoGame.putLogger(player.getName()+" send a theme, "+theme+".");
+        player.sendMessage("テーマを送信しました("+theme+")");
+    }
     public void call(){itoGame.getField().add(this);}
 }

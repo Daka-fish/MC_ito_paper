@@ -1,6 +1,7 @@
 package net.tv.twitch.chrono_fish.ito_paper.GamePack;
 
 import net.kyori.adventure.text.Component;
+import net.tv.twitch.chrono_fish.ito_paper.InvPack.ItoInv;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
@@ -39,12 +40,22 @@ public class ServerListener implements Listener {
             for(int i=0; i<4; i++) theme.append(e.getLine(i));
             ItoPlayer itoPlayer = itoGame.getItoPlayer(e.getPlayer());
             itoPlayer.sendTheme(theme.toString());
-            e.getPlayer().sendMessage("テーマを送信しました("+theme+")");
-            itoGame.putLogger(itoPlayer.getPlayer().getName()+" send a theme, "+theme+".");
             e.line(0,Component.text(""));
             e.line(1,Component.text(""));
             e.line(2,Component.text(""));
             e.line(3,Component.text(""));
+        }
+    }
+
+    @EventHandler
+    public void onItoStick(PlayerInteractEvent e){
+        if(itoGame.isGameRunning()){
+            if(itoGame.getItoPlayer(e.getPlayer()) != null){
+                if(e.getAction().equals(Action.LEFT_CLICK_BLOCK) || e.getAction().equals(Action.LEFT_CLICK_AIR)){
+                    ItoPlayer itoPlayer = itoGame.getItoPlayer(e.getPlayer());
+                    itoPlayer.getPlayer().openInventory(new ItoInv().getMenu());
+                }
+            }
         }
     }
 }

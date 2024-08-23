@@ -11,21 +11,16 @@ import java.util.ArrayList;
 
 public class ItoInv {
     private final Component menuTitle = Component.text("メニュー");
-    private final Inventory menu = Bukkit.createInventory(null,54, menuTitle);
+    private final Inventory menu = Bukkit.createInventory(null,9, menuTitle);
 
     public ItoInv(){
-        ItemStack stick = new ItemStack(Material.STICK);
+        ItemStack stick = new ItemStack(Material.DIAMOND_SWORD);
         ItemMeta swordMeta = stick.getItemMeta();
         swordMeta.displayName(Component.text("ゲームを開始する"));
         ArrayList<Component> permissionLore = new ArrayList<>();
         permissionLore.add(Component.text("権限が必要です"));
         swordMeta.lore(permissionLore);
         stick.setItemMeta(swordMeta);
-
-        ItemStack gunpowder = new ItemStack(Material.GUNPOWDER);
-        ItemMeta gunpowderMeta = gunpowder.getItemMeta();
-        gunpowderMeta.displayName(Component.text("閉じる"));
-        gunpowder.setItemMeta(gunpowderMeta);
 
         ItemStack paper = new ItemStack(Material.PAPER);
         ItemMeta paperMeta = paper.getItemMeta();
@@ -49,12 +44,11 @@ public class ItoInv {
         breadMeta.displayName(Component.text("コールする"));
         bread.setItemMeta(breadMeta);
 
-        menu.setItem(11,stick);
-        menu.setItem(13,paper);
-        menu.setItem(15,torch);
-        menu.setItem(38,snowball);
-        menu.setItem(40,bread);
-        menu.setItem(42,gunpowder);
+        menu.setItem(0,stick);
+        menu.setItem(2,paper);
+        menu.setItem(4,torch);
+        menu.setItem(6,snowball);
+        menu.setItem(8,bread);
     }
 
     public Inventory getMenu() {return menu;}
