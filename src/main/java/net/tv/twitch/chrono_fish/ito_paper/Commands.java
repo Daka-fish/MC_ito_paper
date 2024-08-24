@@ -31,9 +31,7 @@ public class Commands implements CommandExecutor {
 
     private ItoGame itoGame;
 
-    public Commands(ItoGame itoGame){
-        this.itoGame = itoGame;
-    }
+    public Commands(ItoGame itoGame){this.itoGame = itoGame;}
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
@@ -51,21 +49,10 @@ public class Commands implements CommandExecutor {
                     }
 
                     if(args[0].equalsIgnoreCase("gm")){
+                        itoGame.setGameMaster(snd);
+                        itoGame.getItoConfig().setGameMaster(snd.getUniqueId());
+                        itoGame.putLogger(snd.getName()+" becomes the game master");
                         snd.getInventory().addItem(new ItemStack(Material.STICK));
-//                        ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
-//                        BookMeta meta = (BookMeta) book.getItemMeta();
-//                        meta.setTitle("Game Book");
-//                        meta.setAuthor("You are the Game Master");
-//                        meta.addPages(Component.text("\n\n+Itoを開始します")
-//                                    .decorate(TextDecoration.UNDERLINED)
-//                                    .clickEvent(ClickEvent.runCommand("/ito start"))
-//                                    .hoverEvent(HoverEvent.showText(Component.text("クリックでゲームを開始します")))
-//                                .append((Component.text("\n\n参加者一覧を表示します")
-//                                        .decorate(TextDecoration.UNDERLINED)
-//                                        .clickEvent(ClickEvent.runCommand("/ito list"))
-//                                        .hoverEvent(HoverEvent.showText(Component.text("クリックで参加者一覧を表示します"))))));
-//                        book.setItemMeta(meta);
-//                        snd.getInventory().addItem(book);
                     }
 
                     if(args[0].equalsIgnoreCase("leave")){

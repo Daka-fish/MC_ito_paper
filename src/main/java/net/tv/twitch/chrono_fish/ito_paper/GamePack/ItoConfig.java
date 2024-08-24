@@ -1,11 +1,10 @@
 package net.tv.twitch.chrono_fish.ito_paper.GamePack;
 
 import net.tv.twitch.chrono_fish.ito_paper.Ito_paper;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
+import java.util.UUID;
 
 public class ItoConfig {
 
@@ -24,31 +23,12 @@ public class ItoConfig {
         ito_paper.saveConfig();
     }
 
-    public Location getSignLocation(){
-        return new Location(Bukkit.getWorld("world"),
-                config.getDouble("ito.lobby.x"),
-                config.getDouble("ito.lobby.y"),
-                config.getDouble("ito.lobby.z"));
+    public String getGameMaster(){
+        return config.getString("ito.gameMaster");
     }
 
-    public void setSignLocation(Location location){
-        double x = location.getX();
-        double y = location.getY();
-        double z = location.getZ();
-        config.set("ito.lobby.x",x);
-        config.set("ito.lobby.y",y);
-        config.set("ito.lobby.z",z);
+    public void setGameMaster(UUID uuid){
+        config.set("ito.gameMaster",uuid.toString());
         ito_paper.saveConfig();
-    }
-
-    public void equalGameLocation(Location location){
-//        Location loc1 = itoGame.getGameLocation();
-//        System.out.println(loc1);
-//        System.out.println(location);
-//        double tolerance = 1.5;
-//        return loc1.getWorld().equals(location.getWorld())
-//                && Math.abs(loc1.getBlockX() - location.getBlockX()) < tolerance
-//                && Math.abs(loc1.getBlockY() - location.getBlockY()) < tolerance
-//                && Math.abs(loc1.getBlockZ() - location.getBlockZ()) < tolerance;
     }
 }

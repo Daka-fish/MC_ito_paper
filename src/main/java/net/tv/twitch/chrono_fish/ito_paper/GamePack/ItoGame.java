@@ -3,12 +3,14 @@ package net.tv.twitch.chrono_fish.ito_paper.GamePack;
 import net.tv.twitch.chrono_fish.ito_paper.Ito_paper;
 import net.tv.twitch.chrono_fish.ito_paper.Manager.NumberManager;
 import net.tv.twitch.chrono_fish.ito_paper.Manager.ThemeManager;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.UUID;
 
 public class ItoGame {
 
@@ -19,6 +21,7 @@ public class ItoGame {
     private String theme;
     private final ArrayList<ItoPlayer> itoPlayers;
     private final ArrayList<ItoPlayer> field;
+    private Player gameMaster;
     private boolean gameRunning;
     private boolean console;
 
@@ -35,15 +38,21 @@ public class ItoGame {
         this.console = true;
         this.numberManager = new NumberManager();
         this.themeManager = new ThemeManager();
+        if(!itoConfig.getGameMaster().equalsIgnoreCase("default")){
+            this.gameMaster = Bukkit.getPlayer(UUID.fromString(itoConfig.getGameMaster()));
+        }
     }
 
     public Ito_paper getIto_paper() {return ito_paper;}
+    public ItoConfig getItoConfig() {return itoConfig;}
     public void setTheme(String theme) {this.theme = theme;}
     public String getTheme() {return theme;}
     public ArrayList<ItoPlayer> getPlayers() {return itoPlayers;}
     public ArrayList<ItoPlayer> getField() {return field;}
     public boolean isGameRunning() {return gameRunning;}
     public void setGameRunning(boolean gameRunning) {this.gameRunning = gameRunning;}
+    public Player getGameMaster() {return gameMaster;}
+    public void setGameMaster(Player gameMaster) {this.gameMaster = gameMaster;}
     public void setConsole(boolean console) {this.console = console;}
 
     public ThemeManager getThemeManager() {return themeManager;}
@@ -69,7 +78,9 @@ public class ItoGame {
             }
         }
         if(itoPlayer == null){
-            return new ItoPlayer(this,player);
+            itoPlayer = new ItoPlayer(this,player);
+            itoPlayers.add(itoPlayer);
+            return itoPlayer;
         }
         return itoPlayer;
     }

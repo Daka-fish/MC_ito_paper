@@ -37,6 +37,7 @@ public class ItoInv {
         ItemStack snowball = new ItemStack(Material.SNOWBALL);
         ItemMeta snowMeta = snowball.getItemMeta();
         snowMeta.displayName(Component.text("テーマを変更する"));
+        snowMeta.lore(permissionLore);
         snowball.setItemMeta(snowMeta);
 
         ItemStack bread = new ItemStack(Material.BREAD);

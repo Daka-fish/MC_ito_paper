@@ -11,10 +11,17 @@ public final class Ito_paper extends JavaPlugin {
     @Override
     public void onEnable() {
         ItoGame itoGame = new ItoGame(this);
-        getCommand("menu").setExecutor(new Commands(itoGame));
         getCommand("ito").setExecutor(new Commands(itoGame));
         Bukkit.getPluginManager().registerEvents(new InvListener(itoGame),this);
         Bukkit.getPluginManager().registerEvents(new ServerListener(itoGame),this);
+
+        StringBuilder message = new StringBuilder("Ito is enable, the game master is ");
+        if(itoGame.getGameMaster() != null){
+            message.append(itoGame.getGameMaster().getName());
+        }else{
+            message.append("null");
+        }
+        putLogger(message.toString());
     }
 
     public void putLogger(String message){getLogger().info(message);}

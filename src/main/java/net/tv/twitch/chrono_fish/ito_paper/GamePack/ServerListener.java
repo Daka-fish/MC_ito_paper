@@ -3,7 +3,6 @@ package net.tv.twitch.chrono_fish.ito_paper.GamePack;
 import net.kyori.adventure.text.Component;
 import net.tv.twitch.chrono_fish.ito_paper.InvPack.ItoInv;
 import org.bukkit.Material;
-import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -24,7 +23,6 @@ public class ServerListener implements Listener {
     public void onJoin(PlayerJoinEvent e){
         ItoPlayer joined = new ItoPlayer(itoGame, e.getPlayer());
         itoGame.getPlayers().add(joined);
-        e.getPlayer().giveExp(1);
     }
 
     @EventHandler
@@ -50,12 +48,23 @@ public class ServerListener implements Listener {
     @EventHandler
     public void onItoStick(PlayerInteractEvent e){
         if(itoGame.isGameRunning()){
-            if(itoGame.getItoPlayer(e.getPlayer()) != null){
-                if(e.getAction().equals(Action.LEFT_CLICK_BLOCK) || e.getAction().equals(Action.LEFT_CLICK_AIR)){
+            if(e.getItem() != null && e.getItem().getType().equals(Material.STICK)){
+                if(itoGame.getItoPlayer(e.getPlayer()) != null){
+                    if(e.getAction().equals(Action.LEFT_CLICK_BLOCK) || e.getAction().equals(Action.LEFT_CLICK_AIR)){
+                        ItoPlayer itoPlayer = itoGame.getItoPlayer(e.getPlayer());
+                        itoPlayer.getPlayer().openInventory(new ItoInv().getMenu());
+                    }
+                }
+            }
+
+        }else{
+            if(e.getItem() != null && e.getItem().getType().equals(Material.STICK)){
+                if(itoGame.getGameMaster().equals(e.getPlayer())){
                     ItoPlayer itoPlayer = itoGame.getItoPlayer(e.getPlayer());
                     itoPlayer.getPlayer().openInventory(new ItoInv().getMenu());
                 }
             }
+
         }
     }
 }

@@ -16,10 +16,11 @@ public class InvManager {
 
     public void invAction(Player player, Material material){
         ThemeManager themeManager = itoGame.getThemeManager();
+        boolean isGameMaster = itoGame.getItoConfig().getGameMaster().equals(player.getUniqueId().toString());
         switch(material){
-            case STICK:
+            case DIAMOND_SWORD:
                 player.closeInventory();
-                if(player.hasPermission("ito_paper.menu")){
+                if(isGameMaster){
                     if(!themeManager.getThemePool().isEmpty()){
                         ArrayList<String> themes = themeManager.getThemePool();
                         Collections.shuffle(themes);
@@ -45,27 +46,35 @@ public class InvManager {
 
             case PAPER:
                 player.closeInventory();
-                StringBuilder themesMessage = new StringBuilder("+テーマ一覧("+themeManager.getThemePool().size()+")");
-                themeManager.getThemePool().forEach(theme -> themesMessage.append("\n・").append(theme));
-                itoGame.sendMessage(themesMessage.toString());
+                if(isGameMaster){
+                    StringBuilder themesMessage = new StringBuilder("+テーマ一覧("+themeManager.getThemePool().size()+")");
+                    themeManager.getThemePool().forEach(theme -> themesMessage.append("\n・").append(theme));
+                    itoGame.sendMessage(themesMessage.toString());
+                }else{
+                    player.sendMessage("§c権限がありません");
+                }
                 break;
 
             case TORCH:
                 player.closeInventory();
-                if(itoGame.isGameRunning()){
-                    if(itoGame.getField().size() < itoGame.getPlayers().size()){
-                        player.sendMessage("§cコールの数が不足しています(あと§a"+(itoGame.getPlayers().size()-itoGame.getField().size())+"§c人)");
-                        return;
+                if(isGameMaster){
+                    if(itoGame.isGameRunning()){
+                        if(itoGame.getField().size() < itoGame.getPlayers().size()){
+                            player.sendMessage("§cコールの数が不足しています(あと§a"+(itoGame.getPlayers().size()-itoGame.getField().size())+"§c人)");
+                            return;
+                        }
+                        itoGame.check();
+                    }else{
+                        player.sendMessage("§cゲームが開始されていません");
                     }
-                    itoGame.check();
                 }else{
-                    player.sendMessage("§cゲームが開始されていません");
+                    player.sendMessage("§c権限がありません");
                 }
                 break;
 
             case SNOWBALL:
                 player.closeInventory();
-                if(player.hasPermission("ito_paper.menu") && itoGame.isGameRunning()){
+                if(isGameMaster && itoGame.isGameRunning()){
                     if(!itoGame.getThemeManager().getThemePool().isEmpty()){
                         ArrayList<String> themes = themeManager.getThemePool();
                         Collections.shuffle(themes);
@@ -100,8 +109,8 @@ public class InvManager {
                 }
                 break;
 
-            case GUNPOWDER:
-                player.closeInventory();
+            default:
+                player.sendMessage("§cInvalid action!");
                 break;
         }
     }
