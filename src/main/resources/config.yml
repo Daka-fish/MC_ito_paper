@@ -1,3 +1,5 @@
 ito:
-  gameMaster: 'default'
+  gameMaster:
+    uuid: 'default'
+    name: 'default'
   theme: {}

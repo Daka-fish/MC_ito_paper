@@ -59,7 +59,7 @@ public class ServerListener implements Listener {
 
         }else{
             if(e.getItem() != null && e.getItem().getType().equals(Material.STICK)){
-                if(itoGame.getGameMaster().equals(e.getPlayer())){
+                if(itoGame.getGameMaster() != null && itoGame.getGameMaster().equals(e.getPlayer())){
                     ItoPlayer itoPlayer = itoGame.getItoPlayer(e.getPlayer());
                     itoPlayer.getPlayer().openInventory(new ItoInv().getMenu());
                 }
