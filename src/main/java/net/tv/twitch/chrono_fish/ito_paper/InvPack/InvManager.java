@@ -30,8 +30,11 @@ public class InvManager {
                         itoGame.getField().clear();
                         itoGame.putLogger(player.getName()+" starts the game with "+itoGame.getTheme()+".");
                         itoGame.getPlayers().forEach(itoPlayer -> {
+                            itoPlayer.setCallOrder(-1);
+                            itoPlayer.setHasCall(false);
                             itoPlayer.getItoBoard().reloadNumber();
                             itoPlayer.getItoBoard().reloadTheme();
+                            itoPlayer.getItoBoard().reloadCallOrder();
                         });
                         itoGame.sendMessage("ゲームを開始します、テーマは【§a"+itoGame.getTheme()+"§f】です");
                         themeManager.getThemePool().remove(itoGame.getTheme());
@@ -86,7 +89,7 @@ public class InvManager {
                         player.sendMessage("§cテーマプールが空のため変更できません");
                     }
                 }else{
-                    player.sendMessage("権限がないか、進行中のゲームがありません");
+                    player.sendMessage("§c権限がないか、進行中のゲームがありません");
                 }
                 break;
 

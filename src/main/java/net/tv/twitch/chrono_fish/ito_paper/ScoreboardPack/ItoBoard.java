@@ -73,7 +73,7 @@ public class ItoBoard {
 
     public void reloadCallOrder(){
         board.resetScores(callOrder);
-        callOrder = " └ §e"+(itoGame.getField().indexOf(itoPlayer)+1);
+        callOrder = " └ §e"+(itoPlayer.getCallOrder());
         obj.getScore(callOrder).setScore(-8);
     }
 }

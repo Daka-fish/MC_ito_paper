@@ -50,7 +50,7 @@ public class Commands implements CommandExecutor {
 
                     if(args[0].equalsIgnoreCase("gm")){
                         itoGame.setGameMaster(snd);
-                        itoGame.getItoConfig().setGameMaster(snd.getUniqueId());
+                        itoGame.getItoConfig().setGameMaster(snd);
                         itoGame.putLogger(snd.getName()+" becomes the game master");
                         snd.getInventory().addItem(new ItemStack(Material.STICK));
                     }

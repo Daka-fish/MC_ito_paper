@@ -21,7 +21,7 @@ public class ItoGame {
     private String theme;
     private final ArrayList<ItoPlayer> itoPlayers;
     private final ArrayList<ItoPlayer> field;
-    private Player gameMaster;
+    private String gameMasterUUID;
     private boolean gameRunning;
     private boolean console;
 
@@ -39,7 +39,7 @@ public class ItoGame {
         this.numberManager = new NumberManager();
         this.themeManager = new ThemeManager();
         if(!itoConfig.getGameMaster().equalsIgnoreCase("default")){
-            this.gameMaster = Bukkit.getPlayer(UUID.fromString(itoConfig.getGameMaster()));
+            this.gameMasterUUID = itoConfig.getGameMaster();
         }
     }
 
@@ -51,8 +51,8 @@ public class ItoGame {
     public ArrayList<ItoPlayer> getField() {return field;}
     public boolean isGameRunning() {return gameRunning;}
     public void setGameRunning(boolean gameRunning) {this.gameRunning = gameRunning;}
-    public Player getGameMaster() {return gameMaster;}
-    public void setGameMaster(Player gameMaster) {this.gameMaster = gameMaster;}
+    public String getGameMaster() {return gameMasterUUID;}
+    public void setGameMaster(Player gameMaster) {this.gameMasterUUID = gameMaster.getUniqueId().toString();}
     public void setConsole(boolean console) {this.console = console;}
 
     public ThemeManager getThemeManager() {return themeManager;}
@@ -118,6 +118,5 @@ public class ItoGame {
             }
         }
         gameRunning = false;
-        field.sort(Comparator.comparingInt(ItoPlayer::getNumber));
     }
 }

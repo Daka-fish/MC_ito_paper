@@ -39,5 +39,6 @@ public class ItoPlayer {
         itoGame.putLogger(player.getName()+" send a theme, "+theme+".");
         player.sendMessage("テーマを送信しました("+theme+")");
     }
+
     public void call(){itoGame.getField().add(this);}
 }

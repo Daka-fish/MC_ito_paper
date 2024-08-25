@@ -1,6 +1,8 @@
-package net.tv.twitch.chrono_fish.ito_paper.GamePack;
+package net.tv.twitch.chrono_fish.ito_paper.Listener;
 
 import net.kyori.adventure.text.Component;
+import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
+import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoPlayer;
 import net.tv.twitch.chrono_fish.ito_paper.InvPack.ItoInv;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -51,6 +53,7 @@ public class ServerListener implements Listener {
             if(e.getItem() != null && e.getItem().getType().equals(Material.STICK)){
                 if(itoGame.getItoPlayer(e.getPlayer()) != null){
                     if(e.getAction().equals(Action.LEFT_CLICK_BLOCK) || e.getAction().equals(Action.LEFT_CLICK_AIR)){
+                        e.setCancelled(true);
                         ItoPlayer itoPlayer = itoGame.getItoPlayer(e.getPlayer());
                         itoPlayer.getPlayer().openInventory(new ItoInv().getMenu());
                     }
@@ -59,9 +62,13 @@ public class ServerListener implements Listener {
 
         }else{
             if(e.getItem() != null && e.getItem().getType().equals(Material.STICK)){
-                if(itoGame.getGameMaster() != null && itoGame.getGameMaster().equals(e.getPlayer())){
-                    ItoPlayer itoPlayer = itoGame.getItoPlayer(e.getPlayer());
-                    itoPlayer.getPlayer().openInventory(new ItoInv().getMenu());
+                if(itoGame.getGameMaster() != null && itoGame.getGameMaster().equals(e.getPlayer().getUniqueId().toString())){
+                    if(e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)){
+                        e.setCancelled(true);
+                        ItoPlayer itoPlayer = itoGame.getItoPlayer(e.getPlayer());
+                        itoPlayer.getPlayer().openInventory(new ItoInv().getMenu());
+                    }
+
                 }
             }
 

@@ -2,6 +2,7 @@ package net.tv.twitch.chrono_fish.ito_paper.GamePack;
 
 import net.tv.twitch.chrono_fish.ito_paper.Ito_paper;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.UUID;
@@ -24,11 +25,12 @@ public class ItoConfig {
     }
 
     public String getGameMaster(){
-        return config.getString("ito.gameMaster");
+        return config.getString("ito.gameMaster.uuid");
     }
 
-    public void setGameMaster(UUID uuid){
-        config.set("ito.gameMaster",uuid.toString());
+    public void setGameMaster(Player player){
+        config.set("ito.gameMaster.uuid",player.getUniqueId().toString());
+        config.set("ito.gameMaster.name",player.getName());
         ito_paper.saveConfig();
     }
 }
