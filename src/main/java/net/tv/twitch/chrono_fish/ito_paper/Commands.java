@@ -71,6 +71,15 @@ public class Commands implements CommandExecutor {
                         itoGame.putLogger(itoPlayer.getPlayer().getName()+" has joined to ito.");
                         return false;
                     }
+
+                    if(args[0].equalsIgnoreCase("console")){
+                        itoGame.setConsole(!itoGame.isConsole());
+                        if(itoGame.isConsole()){
+                            snd.sendMessage("§7コンソールをオンにしました");
+                        }else{
+                            snd.sendMessage("§7コンソールをオフにしました");
+                        }
+                    }
                 }
             }
 

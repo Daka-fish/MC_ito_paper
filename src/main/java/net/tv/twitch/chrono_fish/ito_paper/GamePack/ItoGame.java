@@ -53,6 +53,7 @@ public class ItoGame {
     public void setGameRunning(boolean gameRunning) {this.gameRunning = gameRunning;}
     public String getGameMaster() {return gameMasterUUID;}
     public void setGameMaster(Player gameMaster) {this.gameMasterUUID = gameMaster.getUniqueId().toString();}
+    public boolean isConsole() {return console;}
     public void setConsole(boolean console) {this.console = console;}
 
     public ThemeManager getThemeManager() {return themeManager;}
@@ -105,13 +106,13 @@ public class ItoGame {
             }
         }
         if(success){
-            sendMessage("+成功");
+            sendMessage("ゲーム成功、経験値をたくさん獲得！");
             for(ItoPlayer itoPlayer : field){
                 sendMessage("\n"+itoPlayer.getNumber()+" :"+itoPlayer.getPlayer().getName());
                 itoPlayer.getPlayer().giveExp(5);
             }
         }else{
-            sendMessage("+失敗");
+            sendMessage("ゲーム失敗、経験値をちょっと獲得！");
             for(ItoPlayer itoPlayer : field){
                 sendMessage("\n"+itoPlayer.getNumber()+" :"+itoPlayer.getPlayer().getName());
                 itoPlayer.getPlayer().giveExp(1);
@@ -119,4 +120,6 @@ public class ItoGame {
         }
         gameRunning = false;
     }
+
+    public void openNumber(){new OpenNumberTask(this).runTaskTimer(ito_paper,0,20);}
 }

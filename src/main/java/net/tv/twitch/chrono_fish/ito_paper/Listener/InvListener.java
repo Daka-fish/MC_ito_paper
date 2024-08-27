@@ -1,7 +1,7 @@
 package net.tv.twitch.chrono_fish.ito_paper.Listener;
 
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
-import net.tv.twitch.chrono_fish.ito_paper.InvPack.InvManager;
+import net.tv.twitch.chrono_fish.ito_paper.Manager.InvManager;
 import net.tv.twitch.chrono_fish.ito_paper.InvPack.ItoInv;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

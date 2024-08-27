@@ -20,6 +20,8 @@ public class OpenNumberTask extends BukkitRunnable {
     public void run() {
         if(count == field.size()){
             cancel();
+            itoGame.check();
+            return;
         }
         ItoPlayer itoPlayer = field.get(count);
         itoGame.sendMessage(itoPlayer.getNumber()+" : "+itoPlayer.getPlayer().getName());

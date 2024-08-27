@@ -1,8 +1,7 @@
-package net.tv.twitch.chrono_fish.ito_paper.InvPack;
+package net.tv.twitch.chrono_fish.ito_paper.Manager;
 
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoPlayer;
-import net.tv.twitch.chrono_fish.ito_paper.Manager.ThemeManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -66,7 +65,7 @@ public class InvManager {
                             player.sendMessage("§cコールの数が不足しています(あと§a"+(itoGame.getPlayers().size()-itoGame.getField().size())+"§c人)");
                             return;
                         }
-                        itoGame.check();
+                        itoGame.openNumber();
                     }else{
                         player.sendMessage("§cゲームが開始されていません");
                     }
