@@ -2,4 +2,6 @@ ito:
   gameMaster:
     uuid: 'default'
     name: 'default'
+  console: 1
+  required-players: 2
   theme: {}

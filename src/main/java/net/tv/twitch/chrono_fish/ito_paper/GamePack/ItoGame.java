@@ -3,14 +3,12 @@ package net.tv.twitch.chrono_fish.ito_paper.GamePack;
 import net.tv.twitch.chrono_fish.ito_paper.Ito_paper;
 import net.tv.twitch.chrono_fish.ito_paper.Manager.NumberManager;
 import net.tv.twitch.chrono_fish.ito_paper.Manager.ThemeManager;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import net.tv.twitch.chrono_fish.ito_paper.ScoreboardPack.ItoBoard;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.DisplaySlot;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.UUID;
 
 public class ItoGame {
 
@@ -20,6 +18,7 @@ public class ItoGame {
 
     private String theme;
     private final ArrayList<ItoPlayer> itoPlayers;
+    private final ArrayList<ItoPlayer> observers;
     private final ArrayList<ItoPlayer> field;
     private String gameMasterUUID;
     private boolean gameRunning;
@@ -30,16 +29,19 @@ public class ItoGame {
 
     public ItoGame(Ito_paper ito_paper){
         this.ito_paper = ito_paper;
-        this.itoConfig = new ItoConfig(ito_paper,this);
+        this.itoConfig = new ItoConfig(ito_paper);
         this.theme = "テーマを設定してください";
         this.itoPlayers = new ArrayList<>();
+        this.observers = new ArrayList<>();
         this.field = new ArrayList<>();
         this.gameRunning = false;
-        this.console = true;
+        this.console = itoConfig.getConsole();
         this.numberManager = new NumberManager();
         this.themeManager = new ThemeManager();
         if(!itoConfig.getGameMaster().equalsIgnoreCase("default")){
             this.gameMasterUUID = itoConfig.getGameMaster();
+        }else{
+            putLogger("Game Master is empty! it needs sending /ito gm");
         }
     }
 
@@ -48,6 +50,7 @@ public class ItoGame {
     public void setTheme(String theme) {this.theme = theme;}
     public String getTheme() {return theme;}
     public ArrayList<ItoPlayer> getPlayers() {return itoPlayers;}
+    public ArrayList<ItoPlayer> getObservers() {return observers;}
     public ArrayList<ItoPlayer> getField() {return field;}
     public boolean isGameRunning() {return gameRunning;}
     public void setGameRunning(boolean gameRunning) {this.gameRunning = gameRunning;}
@@ -72,16 +75,19 @@ public class ItoGame {
 
     public ItoPlayer getItoPlayer(Player player){
         ItoPlayer itoPlayer = null;
-        for (ItoPlayer ip : itoPlayers) {
-            if (ip.getPlayer().equals(player)) {
+        for(ItoPlayer ip : itoPlayers){
+            if(ip.getPlayer().equals(player)){
                 itoPlayer = ip;
                 break;
             }
         }
         if(itoPlayer == null){
-            itoPlayer = new ItoPlayer(this,player);
-            itoPlayers.add(itoPlayer);
-            return itoPlayer;
+            for(ItoPlayer ip : observers){
+                if(ip.getPlayer().equals(player)){
+                    itoPlayer = ip;
+                    break;
+                }
+            }
         }
         return itoPlayer;
     }
@@ -108,7 +114,6 @@ public class ItoGame {
         if(success){
             sendMessage("ゲーム成功、経験値をたくさん獲得！");
             for(ItoPlayer itoPlayer : field){
-                sendMessage("\n"+itoPlayer.getNumber()+" :"+itoPlayer.getPlayer().getName());
                 itoPlayer.getPlayer().giveExp(5);
             }
         }else{
@@ -121,5 +126,24 @@ public class ItoGame {
         gameRunning = false;
     }
 
-    public void openNumber(){new OpenNumberTask(this).runTaskTimer(ito_paper,0,20);}
+    public void openNumber(){
+        sendMessage("数字を開示します");
+        new OpenNumberTask(this).runTaskTimer(ito_paper,0,20);
+    }
+
+    public void join(ItoPlayer itoPlayer){
+        itoPlayers.add(itoPlayer);
+        observers.remove(itoPlayer);
+        itoPlayer.setInGame(true);
+        itoPlayer.getPlayer().sendMessage("§9itoに参加しました");
+        itoPlayer.setItoBoard(new ItoBoard(this, itoPlayer));
+    }
+
+    public void leave(ItoPlayer itoPlayer){
+        itoPlayers.remove(itoPlayer);
+        observers.add(itoPlayer);
+        itoPlayer.setInGame(false);
+        itoPlayer.getPlayer().getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
+        itoPlayer.getPlayer().sendMessage("§9観戦者になりました");
+    }
 }

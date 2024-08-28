@@ -67,13 +67,13 @@ public class ItoBoard {
 
     public void reloadNumber(){
         board.resetScores(yourNumber);
-        yourNumber = " └ §e"+itoPlayer.getNumber();
+        yourNumber = " └ §e"+ itoPlayer.getNumber();
         obj.getScore(yourNumber).setScore(-5);
     }
 
     public void reloadCallOrder(){
         board.resetScores(callOrder);
-        callOrder = " └ §e"+(itoPlayer.getCallOrder());
+        callOrder = " └ §e"+(itoPlayer.getCallOrder())+" ";
         obj.getScore(callOrder).setScore(-8);
     }
 }

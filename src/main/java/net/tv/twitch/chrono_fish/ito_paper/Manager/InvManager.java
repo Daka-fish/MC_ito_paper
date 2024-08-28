@@ -4,6 +4,7 @@ import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoPlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +21,8 @@ public class InvManager {
             case DIAMOND_SWORD:
                 player.closeInventory();
                 if(isGameMaster){
-                    if(!themeManager.getThemePool().isEmpty()){
+                    if(!themeManager.getThemePool().isEmpty() && itoGame.getPlayers().size() >= itoGame.getItoConfig().getRequiredPlayers()){
+                        StringBuilder gameState = new StringBuilder("-ゲームスタート-\nテーマ: ");
                         ArrayList<String> themes = themeManager.getThemePool();
                         Collections.shuffle(themes);
                         itoGame.setTheme(themes.get(0));
@@ -28,18 +30,24 @@ public class InvManager {
                         itoGame.setNumbers();
                         itoGame.getField().clear();
                         itoGame.putLogger(player.getName()+" starts the game with "+itoGame.getTheme()+".");
+                        gameState.append(itoGame.getTheme()).append("\n").append("プレイヤー: ");
                         itoGame.getPlayers().forEach(itoPlayer -> {
                             itoPlayer.setCallOrder(-1);
                             itoPlayer.setHasCall(false);
-                            itoPlayer.getItoBoard().reloadNumber();
                             itoPlayer.getItoBoard().reloadTheme();
                             itoPlayer.getItoBoard().reloadCallOrder();
+                            itoPlayer.getItoBoard().reloadNumber();
+                            if(!itoPlayer.getPlayer().getUniqueId().toString().equalsIgnoreCase(itoGame.getGameMaster())){
+                                itoPlayer.getPlayer().getInventory().addItem(new ItemStack(Material.STICK));
+                            }
+                            gameState.append("\n").append(itoPlayer.getNumber()).append(" : ").append(itoPlayer.getPlayer().getName());
                         });
+                        itoGame.getObservers().forEach(observer -> observer.getPlayer().sendMessage(gameState.toString()));
                         itoGame.sendMessage("ゲームを開始します、テーマは【§a"+itoGame.getTheme()+"§f】です");
                         themeManager.getThemePool().remove(itoGame.getTheme());
                         return;
                     }else{
-                        player.sendMessage("§cテーマプールが空です");
+                        player.sendMessage("§cテーマプールが空か、プレイヤーの数が足りません");
                     }
                 }else{
                     player.sendMessage("§c権限がありません");

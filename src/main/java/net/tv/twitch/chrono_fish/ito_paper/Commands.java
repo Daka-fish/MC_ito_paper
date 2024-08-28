@@ -1,35 +1,18 @@
 package net.tv.twitch.chrono_fish.ito_paper;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
 import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoPlayer;
-import net.tv.twitch.chrono_fish.ito_paper.InvPack.ItoInv;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.Sign;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.Rotatable;
-import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.DisplaySlot;
 
 public class Commands implements CommandExecutor {
 
-    private ItoGame itoGame;
+    private final ItoGame itoGame;
 
     public Commands(ItoGame itoGame){this.itoGame = itoGame;}
 
@@ -40,45 +23,51 @@ public class Commands implements CommandExecutor {
 
             if(command.getName().equalsIgnoreCase("ito")){
                 if(args.length >= 1){
-                    if(args[0].equalsIgnoreCase("start")){
-                        for(ItoPlayer itoPlayer : itoGame.getPlayers()){
-                            itoPlayer.getPlayer().getInventory().addItem(new ItemStack(Material.STICK));
-                        }
-                        itoGame.setGameRunning(true);
-                        snd.sendMessage("ゲームを開始します");
-                    }
-
                     if(args[0].equalsIgnoreCase("gm")){
                         itoGame.setGameMaster(snd);
                         itoGame.getItoConfig().setGameMaster(snd);
                         itoGame.putLogger(snd.getName()+" becomes the game master");
                         snd.getInventory().addItem(new ItemStack(Material.STICK));
+                        return false;
                     }
 
                     if(args[0].equalsIgnoreCase("leave")){
                         ItoPlayer itoPlayer = itoGame.getItoPlayer(snd);
-                        itoPlayer.getPlayer().getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
-                        snd.sendMessage("§c"+"itoから退室しました");
-                        itoGame.getPlayers().remove(itoPlayer);
-                        itoGame.putLogger(itoPlayer.getPlayer().getName()+" has left from ito.");
+                        itoGame.leave(itoPlayer);
+                        itoGame.putLogger(itoPlayer.getPlayer().getName()+" becomes a observer");
                         return false;
                     }
 
                     if(args[0].equalsIgnoreCase("join")){
-                        ItoPlayer itoPlayer = new ItoPlayer(itoGame,snd);
-                        snd.sendMessage("itoに参加しました");
-                        itoGame.getPlayers().add(itoPlayer);
+                        ItoPlayer itoPlayer = null;
+                        for(ItoPlayer ip : itoGame.getObservers()){
+                            if(ip.getPlayer().equals(snd)){
+                                itoPlayer = ip;
+                                break;
+                            }
+                        }
+                        if(itoPlayer == null){
+                            snd.sendMessage("§c既に参加しています");
+                            return false;
+                        }
+                        itoGame.join(itoPlayer);
                         itoGame.putLogger(itoPlayer.getPlayer().getName()+" has joined to ito.");
                         return false;
                     }
 
                     if(args[0].equalsIgnoreCase("console")){
-                        itoGame.setConsole(!itoGame.isConsole());
-                        if(itoGame.isConsole()){
-                            snd.sendMessage("§7コンソールをオンにしました");
+                        if(itoGame.getGameMaster().equalsIgnoreCase(itoGame.getItoPlayer(snd).getPlayer().getUniqueId().toString())){
+                            itoGame.setConsole(!itoGame.isConsole());
+                            if(itoGame.isConsole()){
+                                snd.sendMessage("§7コンソールをオンにしました");
+                            }else{
+                                snd.sendMessage("§7コンソールをオフにしました");
+                            }
+                            itoGame.getItoConfig().setConsole(itoGame.isConsole());
                         }else{
-                            snd.sendMessage("§7コンソールをオフにしました");
+                            snd.sendMessage("§c権限がありません");
                         }
+                        return false;
                     }
                 }
             }
