@@ -124,6 +124,7 @@ public class ItoGame {
             }
         }
         gameRunning = false;
+        itoConfig.addTheme(theme);
     }
 
     public void openNumber(){

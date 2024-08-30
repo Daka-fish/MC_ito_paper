@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.List;
 
 public class ItoConfig {
 
@@ -37,4 +38,11 @@ public class ItoConfig {
     public boolean getConsole(){return config.getBoolean("ito.console");}
 
     public int getRequiredPlayers(){return config.getInt("ito.required-players");}
+
+    public void addTheme(String theme){
+        List<String> themes = config.getStringList("ito.themes");
+        themes.add(theme);
+        config.set("ito.themes",themes);
+        ito_paper.saveConfig();
+    }
 }
