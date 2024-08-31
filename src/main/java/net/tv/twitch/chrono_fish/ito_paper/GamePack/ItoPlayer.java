@@ -46,6 +46,10 @@ public class ItoPlayer {
     public void setInGame(boolean inGame) {isInGame = inGame;}
 
     public void sendTheme(String theme){
+        if(theme.isEmpty()){
+            player.sendMessage("§c空のテーマは提出できません");
+            return;
+        }
         itoGame.getThemeManager().getThemePool().add(theme);
         itoGame.putLogger(player.getName()+" send a theme, "+theme+".");
         player.sendMessage("テーマを送信しました("+theme+")");

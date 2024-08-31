@@ -1,6 +1,6 @@
 package net.tv.twitch.chrono_fish.ito_paper.GamePack;
 
-import net.tv.twitch.chrono_fish.ito_paper.Ito_paper;
+import net.tv.twitch.chrono_fish.ito_paper.Ito;
 import net.tv.twitch.chrono_fish.ito_paper.Manager.NumberManager;
 import net.tv.twitch.chrono_fish.ito_paper.Manager.ThemeManager;
 import net.tv.twitch.chrono_fish.ito_paper.ScoreboardPack.ItoBoard;
@@ -12,13 +12,12 @@ import java.util.Collections;
 
 public class ItoGame {
 
-    private final Ito_paper ito_paper;
+    private final Ito ito_;
 
     private final ItoConfig itoConfig;
 
     private String theme;
     private final ArrayList<ItoPlayer> itoPlayers;
-    private final ArrayList<ItoPlayer> observers;
     private final ArrayList<ItoPlayer> field;
     private String gameMasterUUID;
     private boolean gameRunning;
@@ -27,12 +26,11 @@ public class ItoGame {
     private final NumberManager numberManager;
     private final ThemeManager themeManager;
 
-    public ItoGame(Ito_paper ito_paper){
-        this.ito_paper = ito_paper;
-        this.itoConfig = new ItoConfig(ito_paper);
+    public ItoGame(Ito ito_){
+        this.ito_ = ito_;
+        this.itoConfig = new ItoConfig(ito_);
         this.theme = "テーマを設定してください";
         this.itoPlayers = new ArrayList<>();
-        this.observers = new ArrayList<>();
         this.field = new ArrayList<>();
         this.gameRunning = false;
         this.console = itoConfig.getConsole();
@@ -45,12 +43,11 @@ public class ItoGame {
         }
     }
 
-    public Ito_paper getIto_paper() {return ito_paper;}
+    public Ito getIto_paper() {return ito_;}
     public ItoConfig getItoConfig() {return itoConfig;}
     public void setTheme(String theme) {this.theme = theme;}
     public String getTheme() {return theme;}
     public ArrayList<ItoPlayer> getPlayers() {return itoPlayers;}
-    public ArrayList<ItoPlayer> getObservers() {return observers;}
     public ArrayList<ItoPlayer> getField() {return field;}
     public boolean isGameRunning() {return gameRunning;}
     public void setGameRunning(boolean gameRunning) {this.gameRunning = gameRunning;}
@@ -63,13 +60,15 @@ public class ItoGame {
 
     public void sendMessage(String message){
         itoPlayers.forEach(itoPlayer -> {
-            itoPlayer.getPlayer().sendMessage(message);
+            if(itoPlayer.isInGame()){
+                itoPlayer.getPlayer().sendMessage(message);
+            }
         });
     }
 
     public void putLogger(String message){
         if(console){
-            ito_paper.putLogger(message);
+            ito_.putLogger(message);
         }
     }
 
@@ -79,14 +78,6 @@ public class ItoGame {
             if(ip.getPlayer().equals(player)){
                 itoPlayer = ip;
                 break;
-            }
-        }
-        if(itoPlayer == null){
-            for(ItoPlayer ip : observers){
-                if(ip.getPlayer().equals(player)){
-                    itoPlayer = ip;
-                    break;
-                }
             }
         }
         return itoPlayer;
@@ -129,20 +120,16 @@ public class ItoGame {
 
     public void openNumber(){
         sendMessage("数字を開示します");
-        new OpenNumberTask(this).runTaskTimer(ito_paper,0,20);
+        new OpenNumberTask(this).runTaskTimer(ito_,0,20);
     }
 
     public void join(ItoPlayer itoPlayer){
-        itoPlayers.add(itoPlayer);
-        observers.remove(itoPlayer);
         itoPlayer.setInGame(true);
         itoPlayer.getPlayer().sendMessage("§9itoに参加しました");
         itoPlayer.setItoBoard(new ItoBoard(this, itoPlayer));
     }
 
     public void leave(ItoPlayer itoPlayer){
-        itoPlayers.remove(itoPlayer);
-        observers.add(itoPlayer);
         itoPlayer.setInGame(false);
         itoPlayer.getPlayer().getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
         itoPlayer.getPlayer().sendMessage("§9観戦者になりました");

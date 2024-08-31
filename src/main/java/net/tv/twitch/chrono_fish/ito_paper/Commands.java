@@ -8,7 +8,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scoreboard.DisplaySlot;
 
 public class Commands implements CommandExecutor {
 
@@ -39,14 +38,8 @@ public class Commands implements CommandExecutor {
                     }
 
                     if(args[0].equalsIgnoreCase("join")){
-                        ItoPlayer itoPlayer = null;
-                        for(ItoPlayer ip : itoGame.getObservers()){
-                            if(ip.getPlayer().equals(snd)){
-                                itoPlayer = ip;
-                                break;
-                            }
-                        }
-                        if(itoPlayer == null){
+                        ItoPlayer itoPlayer = itoGame.getItoPlayer(snd);
+                        if(itoPlayer.isInGame()){
                             snd.sendMessage("§c既に参加しています");
                             return false;
                         }

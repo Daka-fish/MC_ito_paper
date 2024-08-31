@@ -6,7 +6,7 @@ import net.tv.twitch.chrono_fish.ito_paper.Listener.InvListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class Ito_paper extends JavaPlugin {
+public final class Ito extends JavaPlugin {
 
     @Override
     public void onEnable() {

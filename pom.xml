@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.tv.twitch.chrono_fish</groupId>
-    <artifactId>Ito_paper</artifactId>
+    <artifactId>Ito</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>Ito_paper</name>
+    <name>Ito</name>
 
     <properties>
         <java.version>1.8</java.version>

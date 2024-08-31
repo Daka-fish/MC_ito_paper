@@ -30,20 +30,23 @@ public class InvManager {
                         itoGame.setNumbers();
                         itoGame.getField().clear();
                         itoGame.putLogger(player.getName()+" starts the game with "+itoGame.getTheme()+".");
+                        itoGame.sendMessage("ゲームを開始します、テーマは【§a"+itoGame.getTheme()+"§f】です");
                         gameState.append(itoGame.getTheme()).append("\n").append("プレイヤー: ");
                         itoGame.getPlayers().forEach(itoPlayer -> {
-                            itoPlayer.setCallOrder(-1);
-                            itoPlayer.setHasCall(false);
-                            itoPlayer.getItoBoard().reloadTheme();
-                            itoPlayer.getItoBoard().reloadCallOrder();
-                            itoPlayer.getItoBoard().reloadNumber();
-                            if(!itoPlayer.getPlayer().getUniqueId().toString().equalsIgnoreCase(itoGame.getGameMaster())){
-                                itoPlayer.getPlayer().getInventory().addItem(new ItemStack(Material.STICK));
+                            if(itoPlayer.isInGame()){
+                                itoPlayer.setCallOrder(-1);
+                                itoPlayer.setHasCall(false);
+                                itoPlayer.getItoBoard().reloadTheme();
+                                itoPlayer.getItoBoard().reloadCallOrder();
+                                itoPlayer.getItoBoard().reloadNumber();
+                                if(!itoPlayer.getPlayer().getUniqueId().toString().equalsIgnoreCase(itoGame.getGameMaster())){
+                                    itoPlayer.getPlayer().getInventory().addItem(new ItemStack(Material.STICK));
+                                }
+                                gameState.append("\n").append(itoPlayer.getNumber()).append(" : ").append(itoPlayer.getPlayer().getName());
+                            }else{
+                                itoPlayer.getPlayer().sendMessage(gameState.toString());
                             }
-                            gameState.append("\n").append(itoPlayer.getNumber()).append(" : ").append(itoPlayer.getPlayer().getName());
                         });
-                        itoGame.getObservers().forEach(observer -> observer.getPlayer().sendMessage(gameState.toString()));
-                        itoGame.sendMessage("ゲームを開始します、テーマは【§a"+itoGame.getTheme()+"§f】です");
                         themeManager.getThemePool().remove(itoGame.getTheme());
                         return;
                     }else{

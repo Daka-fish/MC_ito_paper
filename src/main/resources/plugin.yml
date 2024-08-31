@@ -1,6 +1,6 @@
-name: Ito_paper
+name: Ito
 version: '${project.version}'
-main: net.tv.twitch.chrono_fish.ito_paper.Ito_paper
+main: net.tv.twitch.chrono_fish.ito_paper.Ito
 api-version: '1.20'
 description: 'This is a custom plugin for playing "ito".'
 commands:

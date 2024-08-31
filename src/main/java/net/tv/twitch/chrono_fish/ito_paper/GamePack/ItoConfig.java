@@ -1,6 +1,6 @@
 package net.tv.twitch.chrono_fish.ito_paper.GamePack;
 
-import net.tv.twitch.chrono_fish.ito_paper.Ito_paper;
+import net.tv.twitch.chrono_fish.ito_paper.Ito;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -10,16 +10,16 @@ import java.util.List;
 public class ItoConfig {
 
     private final FileConfiguration config;
-    private final Ito_paper ito_paper;
+    private final Ito ito_;
 
-    public ItoConfig(Ito_paper ito_paper){
-        this.ito_paper = ito_paper;
-        File configFile = new File(ito_paper.getDataFolder(), "config.yml");
+    public ItoConfig(Ito ito_){
+        this.ito_ = ito_;
+        File configFile = new File(ito_.getDataFolder(), "config.yml");
         if (!configFile.exists()) {
-            ito_paper.saveDefaultConfig();
+            ito_.saveDefaultConfig();
         }
-        this.config = ito_paper.getConfig();
-        ito_paper.saveConfig();
+        this.config = ito_.getConfig();
+        ito_.saveConfig();
     }
 
     public String getGameMaster(){return config.getString("ito.gameMaster.uuid");}
@@ -27,12 +27,12 @@ public class ItoConfig {
     public void setGameMaster(Player player){
         config.set("ito.gameMaster.uuid",player.getUniqueId().toString());
         config.set("ito.gameMaster.name",player.getName());
-        ito_paper.saveConfig();
+        ito_.saveConfig();
     }
 
     public void setConsole(boolean console){
         config.set("ito.console",console);
-        ito_paper.saveConfig();
+        ito_.saveConfig();
     }
 
     public boolean getConsole(){return config.getBoolean("ito.console");}
@@ -43,6 +43,6 @@ public class ItoConfig {
         List<String> themes = config.getStringList("ito.themes");
         themes.add(theme);
         config.set("ito.themes",themes);
-        ito_paper.saveConfig();
+        ito_.saveConfig();
     }
 }
