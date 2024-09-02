@@ -12,7 +12,7 @@ import java.util.Collections;
 
 public class ItoGame {
 
-    private final Ito ito_;
+    private final Ito ito;
 
     private final ItoConfig itoConfig;
 
@@ -26,9 +26,9 @@ public class ItoGame {
     private final NumberManager numberManager;
     private final ThemeManager themeManager;
 
-    public ItoGame(Ito ito_){
-        this.ito_ = ito_;
-        this.itoConfig = new ItoConfig(ito_);
+    public ItoGame(Ito ito){
+        this.ito = ito;
+        this.itoConfig = new ItoConfig(ito);
         this.theme = "テーマを設定してください";
         this.itoPlayers = new ArrayList<>();
         this.field = new ArrayList<>();
@@ -43,7 +43,7 @@ public class ItoGame {
         }
     }
 
-    public Ito getIto_paper() {return ito_;}
+    public Ito getIto_paper() {return ito;}
     public ItoConfig getItoConfig() {return itoConfig;}
     public void setTheme(String theme) {this.theme = theme;}
     public String getTheme() {return theme;}
@@ -68,7 +68,7 @@ public class ItoGame {
 
     public void putLogger(String message){
         if(console){
-            ito_.putLogger(message);
+            ito.putLogger(message);
         }
     }
 
@@ -120,7 +120,7 @@ public class ItoGame {
 
     public void openNumber(){
         sendMessage("数字を開示します");
-        new OpenNumberTask(this).runTaskTimer(ito_,0,20);
+        new OpenNumberTask(this).runTaskTimer(ito,0,20);
     }
 
     public void join(ItoPlayer itoPlayer){
