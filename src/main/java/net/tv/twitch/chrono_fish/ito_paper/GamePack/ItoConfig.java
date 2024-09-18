@@ -10,16 +10,16 @@ import java.util.List;
 public class ItoConfig {
 
     private final FileConfiguration config;
-    private final Ito ito_;
+    private final Ito ito;
 
-    public ItoConfig(Ito ito_){
-        this.ito_ = ito_;
-        File configFile = new File(ito_.getDataFolder(), "config.yml");
+    public ItoConfig(Ito ito){
+        this.ito = ito;
+        File configFile = new File(ito.getDataFolder(), "config.yml");
         if (!configFile.exists()) {
-            ito_.saveDefaultConfig();
+            ito.saveDefaultConfig();
         }
-        this.config = ito_.getConfig();
-        ito_.saveConfig();
+        this.config = ito.getConfig();
+        ito.saveConfig();
     }
 
     public String getGameMaster(){return config.getString("ito.gameMaster.uuid");}
@@ -27,12 +27,12 @@ public class ItoConfig {
     public void setGameMaster(Player player){
         config.set("ito.gameMaster.uuid",player.getUniqueId().toString());
         config.set("ito.gameMaster.name",player.getName());
-        ito_.saveConfig();
+        ito.saveConfig();
     }
 
     public void setConsole(boolean console){
         config.set("ito.console",console);
-        ito_.saveConfig();
+        ito.saveConfig();
     }
 
     public boolean getConsole(){return config.getBoolean("ito.console");}
@@ -43,6 +43,6 @@ public class ItoConfig {
         List<String> themes = config.getStringList("ito.themes");
         themes.add(theme);
         config.set("ito.themes",themes);
-        ito_.saveConfig();
+        ito.saveConfig();
     }
 }
