@@ -50,8 +50,7 @@ public class ItoPlayer {
             player.sendMessage("§c空のテーマは提出できません");
             return;
         }
-        itoGame.getThemeManager().getThemePool().add(theme);
-        itoGame.putLogger(player.getName()+" send a theme, "+theme+".");
+        itoGame.getThemePool().add(theme);
         player.sendMessage("テーマを送信しました("+theme+")");
     }
 

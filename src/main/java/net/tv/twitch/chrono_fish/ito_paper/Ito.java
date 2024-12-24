@@ -15,6 +15,4 @@ public final class Ito extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new InvListener(itoGame),this);
         Bukkit.getPluginManager().registerEvents(new ServerListener(itoGame),this);
     }
-
-    public void putLogger(String message){getLogger().info(message);}
 }

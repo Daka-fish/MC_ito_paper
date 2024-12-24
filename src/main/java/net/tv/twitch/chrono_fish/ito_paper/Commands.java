@@ -25,7 +25,6 @@ public class Commands implements CommandExecutor {
                     if(args[0].equalsIgnoreCase("gm")){
                         itoGame.setGameMaster(snd);
                         itoGame.getItoConfig().setGameMaster(snd);
-                        itoGame.putLogger(snd.getName()+" becomes the game master");
                         snd.getInventory().addItem(new ItemStack(Material.STICK));
                         snd.sendMessage("[ito]§7あなたはゲームマスターになりました。棒を左クリックでゲームを開始してください。");
                         return false;
@@ -44,7 +43,6 @@ public class Commands implements CommandExecutor {
                     if(args[0].equalsIgnoreCase("leave")){
                         ItoPlayer itoPlayer = itoGame.getItoPlayer(snd);
                         itoGame.leave(itoPlayer);
-                        itoGame.putLogger(itoPlayer.getPlayer().getName()+" becomes a observer");
                         return false;
                     }
 
@@ -55,22 +53,6 @@ public class Commands implements CommandExecutor {
                             return false;
                         }
                         itoGame.join(itoPlayer);
-                        itoGame.putLogger(itoPlayer.getPlayer().getName()+" has joined to ito.");
-                        return false;
-                    }
-
-                    if(args[0].equalsIgnoreCase("console")){
-                        if(itoGame.getGameMaster().equalsIgnoreCase(itoGame.getItoPlayer(snd).getPlayer().getUniqueId().toString())){
-                            itoGame.setConsole(!itoGame.isConsole());
-                            if(itoGame.isConsole()){
-                                snd.sendMessage("§7コンソールをオンにしました");
-                            }else{
-                                snd.sendMessage("§7コンソールをオフにしました");
-                            }
-                            itoGame.getItoConfig().setConsole(itoGame.isConsole());
-                        }else{
-                            snd.sendMessage("§c権限がありません");
-                        }
                         return false;
                     }
                 }

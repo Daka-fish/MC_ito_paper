@@ -1,8 +1,6 @@
 package net.tv.twitch.chrono_fish.ito_paper.GamePack;
 
 import net.tv.twitch.chrono_fish.ito_paper.Ito;
-import net.tv.twitch.chrono_fish.ito_paper.Manager.NumberManager;
-import net.tv.twitch.chrono_fish.ito_paper.Manager.ThemeManager;
 import net.tv.twitch.chrono_fish.ito_paper.ScoreboardPack.ItoBoard;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -21,10 +19,9 @@ public class ItoGame {
     private final ArrayList<ItoPlayer> field;
     private String gameMasterUUID;
     private boolean gameRunning;
-    private boolean console;
 
-    private final NumberManager numberManager;
-    private final ThemeManager themeManager;
+    private final ArrayList<String> themePool;
+    private final ArrayList<Integer> numbers;
 
     public ItoGame(Ito ito){
         this.ito = ito;
@@ -33,14 +30,13 @@ public class ItoGame {
         this.itoPlayers = new ArrayList<>();
         this.field = new ArrayList<>();
         this.gameRunning = false;
-        this.console = itoConfig.getConsole();
-        this.numberManager = new NumberManager();
-        this.themeManager = new ThemeManager();
         if(!itoConfig.getGameMaster().equalsIgnoreCase("default")){
             this.gameMasterUUID = itoConfig.getGameMaster();
-        }else{
-            putLogger("Game Master is empty! it needs sending /ito gm");
         }
+
+        this.themePool = new ArrayList<>();
+        this.numbers = new ArrayList<>();
+        for(int i=0; i<100; i++) numbers.add(i+1);
     }
 
     public Ito getIto_paper() {return ito;}
@@ -53,10 +49,9 @@ public class ItoGame {
     public void setGameRunning(boolean gameRunning) {this.gameRunning = gameRunning;}
     public String getGameMaster() {return gameMasterUUID;}
     public void setGameMaster(Player gameMaster) {this.gameMasterUUID = gameMaster.getUniqueId().toString();}
-    public boolean isConsole() {return console;}
-    public void setConsole(boolean console) {this.console = console;}
 
-    public ThemeManager getThemeManager() {return themeManager;}
+
+    public ArrayList<String> getThemePool() {return themePool;}
 
     public void sendMessage(String message){
         itoPlayers.forEach(itoPlayer -> {
@@ -66,25 +61,16 @@ public class ItoGame {
         });
     }
 
-    public void putLogger(String message){
-        if(console){
-            ito.putLogger(message);
-        }
-    }
-
     public ItoPlayer getItoPlayer(Player player){
-        ItoPlayer itoPlayer = null;
         for(ItoPlayer ip : itoPlayers){
             if(ip.getPlayer().equals(player)){
-                itoPlayer = ip;
-                break;
+                return ip;
             }
         }
-        return itoPlayer;
+        return null;
     }
 
     public void setNumbers(){
-        ArrayList<Integer> numbers = numberManager.getNumbers();
         Collections.shuffle(numbers);
         int i = 0;
         for(ItoPlayer itoPlayer : itoPlayers){
