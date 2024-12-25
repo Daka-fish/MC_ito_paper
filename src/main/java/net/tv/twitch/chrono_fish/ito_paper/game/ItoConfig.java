@@ -1,4 +1,4 @@
-package net.tv.twitch.chrono_fish.ito_paper.GamePack;
+package net.tv.twitch.chrono_fish.ito_paper.game;
 
 import net.tv.twitch.chrono_fish.ito_paper.Ito;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -29,13 +29,6 @@ public class ItoConfig {
         config.set("ito.gameMaster.name",player.getName());
         ito.saveConfig();
     }
-
-    public void setConsole(boolean console){
-        config.set("ito.console",console);
-        ito.saveConfig();
-    }
-
-    public boolean getConsole(){return config.getBoolean("ito.console");}
 
     public int getRequiredPlayers(){return config.getInt("ito.required-players");}
 

@@ -1,7 +1,7 @@
 package net.tv.twitch.chrono_fish.ito_paper.Manager;
 
-import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
-import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoPlayer;
+import net.tv.twitch.chrono_fish.ito_paper.game.ItoGame;
+import net.tv.twitch.chrono_fish.ito_paper.game.ItoPlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -22,27 +22,19 @@ public class InvManager {
                 player.closeInventory();
                 if(isGameMaster){
                     if(!themePool.isEmpty() && itoGame.getPlayers().size() >= itoGame.getItoConfig().getRequiredPlayers()){
-                        StringBuilder gameState = new StringBuilder("-ゲームスタート-\nテーマ: ");
                         Collections.shuffle(themePool);
                         itoGame.setTheme(themePool.get(0));
                         itoGame.setGameRunning(true);
                         itoGame.setNumbers();
-                        itoGame.getField().clear();
+                        itoGame.getCallList().clear();
                         itoGame.sendMessage("ゲームを開始します、テーマは【§a"+itoGame.getTheme()+"§f】です");
-                        gameState.append(itoGame.getTheme()).append("\n").append("プレイヤー: ");
                         itoGame.getPlayers().forEach(itoPlayer -> {
-                            if(itoPlayer.isInGame()){
-                                itoPlayer.setCallOrder(-1);
-                                itoPlayer.setHasCall(false);
-                                itoPlayer.getItoBoard().reloadTheme();
-                                itoPlayer.getItoBoard().reloadCallOrder();
-                                itoPlayer.getItoBoard().reloadNumber();
-                                if(!itoPlayer.getPlayer().getUniqueId().toString().equalsIgnoreCase(itoGame.getGameMaster())){
-                                    itoPlayer.getPlayer().getInventory().addItem(new ItemStack(Material.STICK));
-                                }
-                                gameState.append("\n").append(itoPlayer.getNumber()).append(" : ").append(itoPlayer.getPlayer().getName());
-                            }else{
-                                itoPlayer.getPlayer().sendMessage(gameState.toString());
+                            itoPlayer.setHasCall(false);
+                            itoPlayer.getItoBoard().reloadTheme();
+                            itoPlayer.getItoBoard().reloadCallOrder();
+                            itoPlayer.getItoBoard().reloadNumber();
+                            if(!itoPlayer.getPlayer().getUniqueId().toString().equalsIgnoreCase(itoGame.getGameMaster())){
+                                itoPlayer.getPlayer().getInventory().addItem(new ItemStack(Material.STICK));
                             }
                         });
                         themePool.remove(itoGame.getTheme());
@@ -70,8 +62,8 @@ public class InvManager {
                 player.closeInventory();
                 if(isGameMaster){
                     if(itoGame.isGameRunning()){
-                        if(itoGame.getField().size() < itoGame.getPlayers().size()){
-                            player.sendMessage("§cコールの数が不足しています(あと§a"+(itoGame.getPlayers().size()-itoGame.getField().size())+"§c人)");
+                        if(itoGame.getCallList().size() < itoGame.getPlayers().size()){
+                            player.sendMessage("§cコールの数が不足しています(あと§a"+(itoGame.getPlayers().size()-itoGame.getCallList().size())+"§c人)");
                             return;
                         }
                         itoGame.openNumber();
@@ -106,8 +98,7 @@ public class InvManager {
                     ItoPlayer itoPlayer = itoGame.getItoPlayer(player);
                     if(!itoPlayer.hasCall()){
                         itoPlayer.call();
-                        itoGame.sendMessage("§e"+player.getName()+"§fがコールしました(コールした順番:"+(itoGame.getField().size())+")");
-                        itoPlayer.setCallOrder(itoGame.getField().size());
+                        itoGame.sendMessage("§e"+player.getName()+"§fがコールしました(コールした順番:"+(itoGame.getCallList().size())+")");
                         itoPlayer.getItoBoard().reloadCallOrder();
                         itoPlayer.setHasCall(true);
                         return;

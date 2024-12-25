@@ -1,4 +1,4 @@
-package net.tv.twitch.chrono_fish.ito_paper.GamePack;
+package net.tv.twitch.chrono_fish.ito_paper.game;
 
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -12,7 +12,7 @@ public class OpenNumberTask extends BukkitRunnable {
 
     public OpenNumberTask(ItoGame itoGame){
         this.itoGame = itoGame;
-        this.field = itoGame.getField();
+        this.field = itoGame.getCallList();
         count = 0;
     }
 
@@ -24,7 +24,7 @@ public class OpenNumberTask extends BukkitRunnable {
             return;
         }
         ItoPlayer itoPlayer = field.get(count);
-        itoGame.sendMessage(itoPlayer.getNumber()+" : "+itoPlayer.getPlayer().getName());
+        itoGame.sendMessage(itoPlayer.getNumber()+" : "+itoPlayer.getName());
         count++;
     }
 }

@@ -1,13 +1,14 @@
 package net.tv.twitch.chrono_fish.ito_paper;
 
-import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
-import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoPlayer;
+import net.tv.twitch.chrono_fish.ito_paper.game.ItoGame;
+import net.tv.twitch.chrono_fish.ito_paper.game.ItoPlayer;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class Commands implements CommandExecutor {
 
@@ -16,7 +17,7 @@ public class Commands implements CommandExecutor {
     public Commands(ItoGame itoGame){this.itoGame = itoGame;}
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] args) {
         if (sender instanceof Player) {
             Player snd = (Player) sender;
 
@@ -47,12 +48,11 @@ public class Commands implements CommandExecutor {
                     }
 
                     if(args[0].equalsIgnoreCase("join")){
-                        ItoPlayer itoPlayer = itoGame.getItoPlayer(snd);
-                        if(itoPlayer.isInGame()){
+                        if(itoGame.getItoPlayer(snd) != null){
                             snd.sendMessage("§c既に参加しています");
                             return false;
                         }
-                        itoGame.join(itoPlayer);
+                        itoGame.join(new ItoPlayer(itoGame,snd));
                         return false;
                     }
                 }

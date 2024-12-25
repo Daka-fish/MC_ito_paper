@@ -2,8 +2,8 @@ package net.tv.twitch.chrono_fish.ito_paper.ScoreboardPack;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
-import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoPlayer;
+import net.tv.twitch.chrono_fish.ito_paper.game.ItoGame;
+import net.tv.twitch.chrono_fish.ito_paper.game.ItoPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.*;
 
@@ -30,7 +30,7 @@ public class ItoBoard {
 
         theme = " └ §7§l"+"UNKNOWN";
         yourNumber = " └ §7§l"+itoPlayer.getNumber();
-        callOrder = " └ §7§l"+itoPlayer.getCallOrder()+" ";
+        callOrder = " └ §7§l"+(itoGame.getCallOrder(itoPlayer))+" ";
 
         Score empty1 = obj.getScore("");
         Score empty2 = obj.getScore(" ");
@@ -73,7 +73,7 @@ public class ItoBoard {
 
     public void reloadCallOrder(){
         board.resetScores(callOrder);
-        callOrder = " └ §e"+(itoPlayer.getCallOrder())+" ";
+        callOrder = " └ §e"+(itoGame.getCallOrder(itoPlayer))+" ";
         obj.getScore(callOrder).setScore(-8);
     }
 }

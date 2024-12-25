@@ -1,8 +1,8 @@
 package net.tv.twitch.chrono_fish.ito_paper.Listener;
 
 import net.kyori.adventure.text.Component;
-import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoGame;
-import net.tv.twitch.chrono_fish.ito_paper.GamePack.ItoPlayer;
+import net.tv.twitch.chrono_fish.ito_paper.game.ItoGame;
+import net.tv.twitch.chrono_fish.ito_paper.game.ItoPlayer;
 import net.tv.twitch.chrono_fish.ito_paper.InvPack.ItoInv;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;

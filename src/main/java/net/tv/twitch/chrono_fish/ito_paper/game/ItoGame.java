@@ -1,4 +1,4 @@
-package net.tv.twitch.chrono_fish.ito_paper.GamePack;
+package net.tv.twitch.chrono_fish.ito_paper.game;
 
 import net.tv.twitch.chrono_fish.ito_paper.Ito;
 import net.tv.twitch.chrono_fish.ito_paper.ScoreboardPack.ItoBoard;
@@ -16,7 +16,7 @@ public class ItoGame {
 
     private String theme;
     private final ArrayList<ItoPlayer> itoPlayers;
-    private final ArrayList<ItoPlayer> field;
+    private final ArrayList<ItoPlayer> callList;
     private String gameMasterUUID;
     private boolean gameRunning;
 
@@ -28,47 +28,46 @@ public class ItoGame {
         this.itoConfig = new ItoConfig(ito);
         this.theme = "テーマを設定してください";
         this.itoPlayers = new ArrayList<>();
-        this.field = new ArrayList<>();
+        this.callList = new ArrayList<>();
         this.gameRunning = false;
         if(!itoConfig.getGameMaster().equalsIgnoreCase("default")){
             this.gameMasterUUID = itoConfig.getGameMaster();
         }
-
         this.themePool = new ArrayList<>();
         this.numbers = new ArrayList<>();
         for(int i=0; i<100; i++) numbers.add(i+1);
     }
 
-    public Ito getIto_paper() {return ito;}
     public ItoConfig getItoConfig() {return itoConfig;}
+
     public void setTheme(String theme) {this.theme = theme;}
     public String getTheme() {return theme;}
+
     public ArrayList<ItoPlayer> getPlayers() {return itoPlayers;}
-    public ArrayList<ItoPlayer> getField() {return field;}
+    public ArrayList<ItoPlayer> getCallList() {return callList;}
+
     public boolean isGameRunning() {return gameRunning;}
     public void setGameRunning(boolean gameRunning) {this.gameRunning = gameRunning;}
+
     public String getGameMaster() {return gameMasterUUID;}
     public void setGameMaster(Player gameMaster) {this.gameMasterUUID = gameMaster.getUniqueId().toString();}
 
-
     public ArrayList<String> getThemePool() {return themePool;}
 
-    public void sendMessage(String message){
-        itoPlayers.forEach(itoPlayer -> {
-            if(itoPlayer.isInGame()){
-                itoPlayer.getPlayer().sendMessage(message);
-            }
-        });
-    }
+    public void addTheme(String theme){themePool.add(theme);}
+
+    public void sendMessage(String message){itoPlayers.forEach(itoPlayer -> itoPlayer.sendMessage("[ito]"+message));}
 
     public ItoPlayer getItoPlayer(Player player){
-        for(ItoPlayer ip : itoPlayers){
-            if(ip.getPlayer().equals(player)){
-                return ip;
+        for(ItoPlayer itoPlayer : itoPlayers){
+            if(itoPlayer.getPlayer().equals(player)){
+                return itoPlayer;
             }
         }
         return null;
     }
+
+    public int getCallOrder(ItoPlayer itoPlayer){return callList.indexOf(itoPlayer)+1;}
 
     public void setNumbers(){
         Collections.shuffle(numbers);
@@ -89,16 +88,9 @@ public class ItoGame {
             }
         }
         if(success){
-            sendMessage("ゲーム成功、経験値をたくさん獲得！");
-            for(ItoPlayer itoPlayer : field){
-                itoPlayer.getPlayer().giveExp(5);
-            }
+            sendMessage("ゲーム成功");
         }else{
-            sendMessage("ゲーム失敗、経験値をちょっと獲得！");
-            for(ItoPlayer itoPlayer : field){
-                sendMessage("\n"+itoPlayer.getNumber()+" :"+itoPlayer.getPlayer().getName());
-                itoPlayer.getPlayer().giveExp(1);
-            }
+            sendMessage("ゲーム失敗");
         }
         gameRunning = false;
         itoConfig.addTheme(theme);
@@ -110,14 +102,12 @@ public class ItoGame {
     }
 
     public void join(ItoPlayer itoPlayer){
-        itoPlayer.setInGame(true);
-        itoPlayer.getPlayer().sendMessage("§9itoに参加しました");
+        itoPlayer.sendMessage("§9itoに参加しました");
         itoPlayer.setItoBoard(new ItoBoard(this, itoPlayer));
     }
 
     public void leave(ItoPlayer itoPlayer){
-        itoPlayer.setInGame(false);
         itoPlayer.getPlayer().getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
-        itoPlayer.getPlayer().sendMessage("§9観戦者になりました");
+        itoPlayer.sendMessage("§9観戦者になりました");
     }
 }
