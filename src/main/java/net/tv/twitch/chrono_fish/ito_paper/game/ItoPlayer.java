@@ -46,6 +46,9 @@ public class ItoPlayer {
     public boolean hasCall() {return hasCall;}
     public void setHasCall(boolean hasCall) {this.hasCall = hasCall;}
 
+    public boolean isHasOpen() {return hasOpen;}
+    public void setHasOpen(boolean hasOpen) {this.hasOpen = hasOpen;}
+
     public void sendTheme(String theme){
         if(theme.isEmpty()){
             player.sendMessage("§c空のテーマは提出できません");
@@ -57,11 +60,17 @@ public class ItoPlayer {
 
     public void sendMessage(String message){if(player != null) player.sendMessage(message);}
 
-    public void call(){itoGame.getCallList().add(this);}
+    public void call(){
+        itoGame.getCallList().add(this);
+        itoGame.sendMessage("§e"+player.getName()+"§fがコールしました(コールした順番:"+(itoGame.getCallList().size())+")");
+        itoBoard.reloadCallOrder();
+        setHasCall(true);
+    }
 
     public void openNumber(){
         if(!hasOpen){
             itoGame.sendMessage(name+"の番号: "+number);
+            setHasOpen(true);
         }else{
             sendMessage("§c既に開示しています");
         }

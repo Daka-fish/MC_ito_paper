@@ -2,7 +2,9 @@ package net.tv.twitch.chrono_fish.ito_paper.game;
 
 import net.tv.twitch.chrono_fish.ito_paper.Ito;
 import net.tv.twitch.chrono_fish.ito_paper.ScoreboardPack.ItoBoard;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.DisplaySlot;
 
 import java.util.ArrayList;
@@ -17,7 +19,6 @@ public class ItoGame {
     private String theme;
     private final ArrayList<ItoPlayer> itoPlayers;
     private final ArrayList<ItoPlayer> callList;
-    private String gameMasterUUID;
     private boolean gameRunning;
 
     private final ArrayList<String> themePool;
@@ -30,12 +31,8 @@ public class ItoGame {
         this.itoPlayers = new ArrayList<>();
         this.callList = new ArrayList<>();
         this.gameRunning = false;
-        if(!itoConfig.getGameMaster().equalsIgnoreCase("default")){
-            this.gameMasterUUID = itoConfig.getGameMaster();
-        }
         this.themePool = new ArrayList<>();
         this.numbers = new ArrayList<>();
-        for(int i=0; i<100; i++) numbers.add(i+1);
     }
 
     public ItoConfig getItoConfig() {return itoConfig;}
@@ -49,10 +46,9 @@ public class ItoGame {
     public boolean isGameRunning() {return gameRunning;}
     public void setGameRunning(boolean gameRunning) {this.gameRunning = gameRunning;}
 
-    public String getGameMaster() {return gameMasterUUID;}
-    public void setGameMaster(Player gameMaster) {this.gameMasterUUID = gameMaster.getUniqueId().toString();}
-
     public ArrayList<String> getThemePool() {return themePool;}
+
+    public void setNumbers(){for(int i=0; i<100; i++) numbers.add(i+1);}
 
     public void addTheme(String theme){themePool.add(theme);}
 
@@ -69,14 +65,10 @@ public class ItoGame {
 
     public int getCallOrder(ItoPlayer itoPlayer){return callList.indexOf(itoPlayer)+1;}
 
-    public void setNumbers(){
-        Collections.shuffle(numbers);
-        int i = 0;
-        for(ItoPlayer itoPlayer : itoPlayers){
-            int number = numbers.get(i);
-            itoPlayer.setNumber(number);
-            i++;
-        }
+    public void setNumber(ItoPlayer itoPlayer){
+        int number = numbers.get(0);
+        itoPlayer.setNumber(number);
+        numbers.remove(0);
     }
 
     public void check(){
@@ -109,5 +101,29 @@ public class ItoGame {
     public void leave(ItoPlayer itoPlayer){
         itoPlayer.getPlayer().getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
         itoPlayer.sendMessage("§9観戦者になりました");
+    }
+
+    public void start(){
+        setNumbers();
+        Collections.shuffle(themePool);
+        Collections.shuffle(numbers);
+        setTheme(themePool.get(0));
+        setGameRunning(true);
+        getCallList().clear();
+        sendMessage("ゲームを開始します、テーマは【§a"+getTheme()+"§f】です");
+        getPlayers().forEach(itoPlayer -> {
+            setNumber(itoPlayer);
+            itoPlayer.setHasCall(false);
+            itoPlayer.getItoBoard().reloadTheme();
+            itoPlayer.getItoBoard().reloadCallOrder();
+            itoPlayer.getItoBoard().reloadNumber();
+            itoPlayer.getPlayer().getInventory().addItem(new ItemStack(Material.STICK));
+        });
+        themePool.remove(getTheme());
+    }
+
+    public void finish(){
+        openNumber();
+        //check();
     }
 }
